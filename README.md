@@ -41,8 +41,6 @@ The entire project lives in **one single `index.html` file** — no frameworks, 
 
 ## 🖼️ Screenshots · ภาพหน้าจอ
 
-> วางไฟล์ภาพไว้ที่ `docs/screenshots/` แล้ว GitHub จะแสดงผลอัตโนมัติ
-
 | Login Page | Hero Section |
 |:---:|:---:|
 | ![Login](login.png) | ![Hero](hero.png) |
