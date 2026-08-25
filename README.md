@@ -45,17 +45,17 @@ The entire project lives in **one single `index.html` file** — no frameworks, 
 
 | Login Page | Hero Section |
 |:---:|:---:|
-| ![Login](docs/screenshots/login.png) | ![Hero](docs/screenshots/hero.png) |
+| ![Login](login.png) | ![Hero](hero.png) |
 | หน้าล็อกอินธีมใต้ทะเล + Glassmorphism card | Hero พร้อม fade-in animation |
 
 | Live Aquarium Tank | Creature Modal |
 |:---:|:---:|
-| ![Tank](docs/screenshots/tank.png) | ![Modal](docs/screenshots/modal.png) |
+| ![Tank](tank.png) | ![Modal](modal.png) |
 | ตู้ปลาหลัก คลิกสัตว์ได้ทุกตัว | การ์ดข้อมูลสัตว์ + Did You Know |
 
 | Keychain Shop | Shopping Cart |
 |:---:|:---:|
-| ![Shop](docs/screenshots/shop.png) | ![Cart](docs/screenshots/cart.png) |
+| ![Shop](shop.png) | ![Cart](cart.png) |
 | ร้านขายพวงกุญแจ 8 แบบ | Cart แบบ Slide-in Sidebar |
 
 ---
