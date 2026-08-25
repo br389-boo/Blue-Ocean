@@ -117,42 +117,6 @@ The entire project lives in **one single `index.html` file** — no frameworks, 
 }
 ```
 
----
-
-## 🎨 Design System · ระบบดีไซน์
-
-### Color Palette
-
-| Token | Hex | Usage |
-|---|---|---|
-| `--deep-0` | `#00101f` | พื้นหลังน้ำลึกสุด |
-| `--deep-2` | `#043158` | Gradient กลาง |
-| `--aqua` | `#2ec5d3` | สีหลัก ปุ่ม Primary |
-| `--cyan` | `#7ef0e6` | Accent, ข้อความเน้น, Glow |
-| `--turquoise` | `#43e0c8` | Gradient ปุ่ม |
-| `--coral` | `#ff8a6b` | Badge ตะกร้า, ปะการัง |
-| `--white` | `#eafcff` | ข้อความหลัก |
-
-### Typography
-
-- **Headings** — [Baloo 2](https://fonts.google.com/specimen/Baloo+2) (ตัวหนากลมมน ให้ความรู้สึกเป็นมิตร)
-- **Body** — [Outfit](https://fonts.google.com/specimen/Outfit) (เรียบ อ่านง่าย รองรับภาษาไทย)
-
-### Glassmorphism
-
-ใช้กับ Navigation · Login Card · Creature Card · Modal · Cart Sidebar
-
-```css
-.glass {
-  background: rgba(255, 255, 255, .08);
-  border: 1px solid rgba(255, 255, 255, .22);
-  backdrop-filter: blur(18px) saturate(140%);
-  box-shadow: 0 18px 50px rgba(0, 15, 35, .45);
-}
-```
-
----
-
 ## ⚙️ Features Checklist · ฟีเจอร์ทั้งหมด
 
 ### Animation & Atmosphere
