@@ -1,4 +1,3 @@
-# Blue-Ocean
 # 🌊 BLUE OCEAN — Interactive Online Aquarium
 
 > **Explore. Learn. Protect.**
@@ -13,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/login.png" alt="Login page" width="80%">
+  <img src="login.png" alt="Login page" width="80%">
 </p>
 
 ---
