@@ -308,6 +308,14 @@ a{color:inherit;text-decoration:none;}
   transition:.3s var(--ease);position:relative;
 }
 .icon-btn:hover{background:rgba(126,240,230,.22);transform:translateY(-2px);box-shadow:var(--glow);}
+/* sound toggle states */
+.icon-btn.muted{opacity:.5;}
+.icon-btn.sounding::after{
+  content:"";position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid rgba(126,240,230,.55);pointer-events:none;
+  animation:soundRing 2.6s ease-out infinite;
+}
+@keyframes soundRing{0%{transform:scale(.85);opacity:.75;}100%{transform:scale(1.4);opacity:0;}}
 .cart-count{
   position:absolute;top:-5px;right:-5px;min-width:21px;height:21px;padding:0 5px;
   border-radius:999px;background:var(--coral);color:#3a1206;
@@ -735,7 +743,7 @@ a{color:inherit;text-decoration:none;}
 
     <button class="btn btn-primary" type="submit" id="loginBtn">Enter Aquarium 🌊</button>
 
-    <p class="login-hint">Demo mode — no real account needed.<br>Press the button and dive straight in.</p>
+    <p class="login-hint">Demo mode — no real account needed.<br>🔊 Best experienced with sound on — mute anytime from the menu.</p>
 
     <div class="login-steps">
       <span>1 · Login</span><span>2 · Explore</span><span>3 · Learn</span><span>4 · Collect</span>
@@ -764,6 +772,7 @@ a{color:inherit;text-decoration:none;}
       </nav>
 
       <div class="nav-tools">
+        <button class="icon-btn sounding" id="soundToggle" aria-label="Toggle ocean sound" title="Ocean sound on/off">🔊</button>
         <button class="icon-btn" id="searchToggle" aria-label="Search">🔍</button>
         <button class="icon-btn" id="cartToggle" aria-label="Cart">
           🛒<span class="cart-count" id="cartCount">0</span>
@@ -967,14 +976,16 @@ a{color:inherit;text-decoration:none;}
    A. Creature dataset
    B. Helpers
    C. Ambient ocean (bubbles, particles, rays, seabed, bg fish)
-   D. Login transition
-   E. Navigation (menu, search, scroll spy, parallax)
-   F. Interactive aquarium tank
-   G. Explore grid: search + category filter
-   H. Creature modal
-   I. Keychain shop
-   J. Cart (add / qty / remove / total) + checkout
-   K. Animated counters + scroll reveal
+   D. Sound engine (Web Audio API — synthesised, no audio files)
+   E. Login transition
+   F. Navigation (menu, search, scroll spy, parallax)
+   F2. UI sound wiring (mute toggle + click sounds)
+   G. Interactive aquarium tank
+   H. Explore grid: search + category filter
+   I. Creature modal
+   J. Keychain shop
+   K. Cart (add / qty / remove / total) + checkout
+   L. Animated counters + scroll reveal
    ========================================================= */
 (function () {
   'use strict';
@@ -1199,7 +1210,156 @@ a{color:inherit;text-decoration:none;}
     });
   }
 
-  /* ===== D. LOGIN TRANSITION =============================== */
+  /* ===== D. SOUND ENGINE (Web Audio API — no audio files) ===
+     ทุกเสียงถูก "สังเคราะห์" ขึ้นด้วยโค้ด จึงไม่ต้องโหลดไฟล์เสียงใด ๆ
+       · ambient  = brown noise ผ่าน lowpass + LFO 2 ตัว (คลื่นซัดเข้า-ออก)
+                    + drone ความถี่ต่ำ (แรงดันใต้น้ำ) + ฟองอากาศสุ่มเป็นระยะ
+       · click    = sine ที่ไล่ความถี่ลง + noise transient สั้น ๆ (เสียงหยดน้ำ)
+     เบราว์เซอร์ห้ามเล่นเสียงก่อนผู้ใช้กดอะไรสักอย่าง จึงสร้าง AudioContext
+     ตอนกดปุ่ม ENTER AQUARIUM ซึ่งเป็น user gesture แรกพอดี
+     ========================================================= */
+  const Sound = (function () {
+    let ctx = null, master = null, ambient = null, tapBuf = null;
+    let muted = false, bubbleTimer = null;
+
+    function ensure() {
+      if (ctx) return ctx;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;                       // เบราว์เซอร์เก่า → เงียบไปเฉย ๆ
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = muted ? 0 : 1;
+      master.connect(ctx.destination);
+      tapBuf = makeNoise(0.12);
+      return ctx;
+    }
+
+    // brown noise = เนื้อเสียงของ "น้ำ" (นุ่มกว่า white noise มาก)
+    function makeNoise(seconds) {
+      const len = Math.floor(ctx.sampleRate * seconds);
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      let last = 0;
+      for (let i = 0; i < len; i++) {
+        const white = Math.random() * 2 - 1;
+        last = (last + 0.02 * white) / 1.02;
+        d[i] = last * 3.2;
+      }
+      return buf;
+    }
+
+    function startAmbient() {
+      if (!ensure() || ambient) return;
+      const now = ctx.currentTime;
+
+      const src = ctx.createBufferSource();
+      src.buffer = makeNoise(6);
+      src.loop = true;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 460;
+      filter.Q.value = .7;
+
+      const gain = ctx.createGain();
+      gain.gain.value = 0;
+      src.connect(filter); filter.connect(gain); gain.connect(master);
+      src.start();
+
+      // LFO 1 → ขยับ cutoff ทำให้คลื่นดัง-เบาเหมือนน้ำซัด
+      const lfo = ctx.createOscillator(); lfo.frequency.value = .07;
+      const lfoAmt = ctx.createGain(); lfoAmt.gain.value = 250;
+      lfo.connect(lfoAmt); lfoAmt.connect(filter.frequency); lfo.start();
+
+      // LFO 2 → ขยับความดังช้ากว่า ให้จังหวะหายใจของทะเล
+      const lfo2 = ctx.createOscillator(); lfo2.frequency.value = .045;
+      const lfo2Amt = ctx.createGain(); lfo2Amt.gain.value = .022;
+      lfo2.connect(lfo2Amt); lfo2Amt.connect(gain.gain); lfo2.start();
+
+      // drone ความถี่ต่ำ = ความรู้สึกอยู่ใต้น้ำลึก
+      const drone = ctx.createOscillator(); drone.type = 'sine'; drone.frequency.value = 58;
+      const droneGain = ctx.createGain(); droneGain.gain.value = .015;
+      drone.connect(droneGain); droneGain.connect(master); drone.start();
+
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(.075, now + 3);   // fade in ช้า ๆ
+
+      ambient = { src, gain, lfo, lfo2, drone };
+      scheduleBubble();
+    }
+
+    // ฟองอากาศผุดขึ้นแบบสุ่มทุก 3–8 วินาที
+    function scheduleBubble() {
+      clearTimeout(bubbleTimer);
+      bubbleTimer = setTimeout(() => { bubble(); scheduleBubble(); }, rand(3000, 8000));
+    }
+
+    function bubble() {
+      if (!ctx || muted || document.hidden) return;
+      const t = ctx.currentTime;
+      const o = ctx.createOscillator(); o.type = 'sine';
+      const g = ctx.createGain();
+      const f0 = rand(230, 480);
+      o.frequency.setValueAtTime(f0, t);
+      o.frequency.exponentialRampToValueAtTime(f0 * 2.7, t + .13);
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(.045, t + .012);
+      g.gain.exponentialRampToValueAtTime(.0001, t + .18);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + .22);
+    }
+
+    // เสียงคลิก = หยดน้ำ (sine ไล่ลง + noise transient สั้น)
+    function click(pitch) {
+      if (!ensure() || muted) return;
+      const t = ctx.currentTime;
+      const f = (pitch || 820) * rand(.92, 1.08);
+
+      const o = ctx.createOscillator(); o.type = 'sine';
+      const g = ctx.createGain();
+      o.frequency.setValueAtTime(f, t);
+      o.frequency.exponentialRampToValueAtTime(f * .42, t + .1);
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(.13, t + .008);
+      g.gain.exponentialRampToValueAtTime(.0001, t + .24);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + .26);
+
+      const n = ctx.createBufferSource(); n.buffer = tapBuf;
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
+      bp.frequency.value = 1700; bp.Q.value = 1.1;
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(.055, t);
+      ng.gain.exponentialRampToValueAtTime(.0001, t + .06);
+      n.connect(bp); bp.connect(ng); ng.connect(master);
+      n.start(t); n.stop(t + .08);
+    }
+
+    function setMuted(v) {
+      muted = v;
+      if (!ctx) return;
+      const t = ctx.currentTime;
+      master.gain.cancelScheduledValues(t);
+      master.gain.setValueAtTime(master.gain.value, t);
+      master.gain.linearRampToValueAtTime(v ? 0 : 1, t + .35);
+    }
+
+    // เบราว์เซอร์พักเสียงเมื่อสลับแท็บ → คืนค่าเมื่อกลับมา
+    document.addEventListener('visibilitychange', () => {
+      if (!ctx) return;
+      if (document.hidden) ctx.suspend(); else if (!muted) ctx.resume();
+    });
+
+    return {
+      unlock() { if (ensure() && ctx.state === 'suspended') ctx.resume(); },
+      start() { this.unlock(); startAmbient(); },
+      click: click,
+      toggle() { setMuted(!muted); if (!muted) this.unlock(); return muted; },
+      isMuted() { return muted; }
+    };
+  })();
+
+  /* ===== E. LOGIN TRANSITION =============================== */
   function initLogin() {
     const screen = $('#login-screen');
     const site = $('#site');
@@ -1208,6 +1368,7 @@ a{color:inherit;text-decoration:none;}
       const btn = $('#loginBtn');
       btn.textContent = 'Diving in… 🫧';
       btn.disabled = true;
+      Sound.start();                       // user gesture แรก → ปลดล็อกเสียงได้
       screen.classList.add('dive');
       setTimeout(() => {
         screen.style.display = 'none';
@@ -1215,10 +1376,31 @@ a{color:inherit;text-decoration:none;}
         window.scrollTo(0, 0);
         toast('Welcome to Blue Ocean, diver!', '🐬');
       }, 900);
+      setTimeout(() => toast('Ocean ambience on — tap 🔊 to mute', '🔊'), 2600);
     });
   }
 
-  /* ===== E. NAVIGATION ===================================== */
+  /* ===== F2. UI SOUND WIRING ============================== */
+  function initSoundUI() {
+    const btn = $('#soundToggle');
+
+    btn.addEventListener('click', () => {
+      const muted = Sound.toggle();
+      btn.textContent = muted ? '🔇' : '🔊';
+      btn.classList.toggle('muted', muted);
+      btn.classList.toggle('sounding', !muted);
+      toast(muted ? 'Sound muted' : 'Ocean sound on', muted ? '🔇' : '🔊');
+    });
+
+    // เล่นเสียงคลิกให้ปุ่ม / เมนู / chip ทุกตัวในเว็บด้วย event delegation
+    document.addEventListener('pointerdown', e => {
+      const el = e.target.closest('button, .btn, .chip, .nav-links a, .footer ul a, .socials a');
+      if (!el || el.id === 'soundToggle') return;
+      Sound.click(el.classList.contains('btn-primary') ? 720 : 880);
+    }, true);
+  }
+
+  /* ===== F. NAVIGATION ===================================== */
   function initNav() {
     const nav = $('#nav');
     const links = $('#navLinks');
@@ -1273,7 +1455,7 @@ a{color:inherit;text-decoration:none;}
     });
   }
 
-  /* ===== F. INTERACTIVE AQUARIUM TANK ====================== */
+  /* ===== G. INTERACTIVE AQUARIUM TANK ====================== */
   function buildTank() {
     const tank = $('#tank');
     const legend = $('#tankLegend');
@@ -1329,7 +1511,7 @@ a{color:inherit;text-decoration:none;}
     });
   }
 
-  /* ===== G. EXPLORE GRID: SEARCH + FILTER ================== */
+  /* ===== H. EXPLORE GRID: SEARCH + FILTER ================== */
   let activeCat = 'all';
 
   function renderGrid() {
@@ -1376,7 +1558,7 @@ a{color:inherit;text-decoration:none;}
     renderGrid();
   }
 
-  /* ===== H. CREATURE MODAL ================================= */
+  /* ===== I. CREATURE MODAL ================================= */
   function openCreature(id) {
     const c = byId(id);
     if (!c) return;
@@ -1418,7 +1600,7 @@ a{color:inherit;text-decoration:none;}
     document.body.classList.remove('locked');
   }
 
-  /* ===== I. KEYCHAIN SHOP ================================== */
+  /* ===== J. KEYCHAIN SHOP ================================== */
   function buildShop() {
     const grid = $('#shopGrid');
     grid.innerHTML = SHOP_IDS.map(id => {
@@ -1440,7 +1622,7 @@ a{color:inherit;text-decoration:none;}
     $$('[data-view]', grid).forEach(b => b.addEventListener('click', () => openCreature(b.dataset.view)));
   }
 
-  /* ===== J. CART =========================================== */
+  /* ===== K. CART =========================================== */
   const cart = [];   // { id, qty }
 
   function addToCart(id, sourceEl) {
@@ -1563,7 +1745,7 @@ a{color:inherit;text-decoration:none;}
     renderCart();
   }
 
-  /* ===== K. COUNTERS + SCROLL REVEAL ======================= */
+  /* ===== L. COUNTERS + SCROLL REVEAL ======================= */
   function initObservers() {
     const revealIO = new IntersectionObserver((entries, obs) => {
       entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); obs.unobserve(en.target); } });
@@ -1593,6 +1775,7 @@ a{color:inherit;text-decoration:none;}
   /* ===== BOOT ============================================== */
   buildAmbience();
   initLogin();
+  initSoundUI();
   initNav();
   buildTank();
   initExplore();
