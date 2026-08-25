@@ -60,29 +60,6 @@ The entire project lives in **one single `index.html` file** — no frameworks, 
 
 ---
 
-## 🚀 Getting Started · วิธีใช้งาน
-
-### Option 1 — เปิดไฟล์ตรง ๆ (ง่ายที่สุด)
-
-```bash
-git clone https://github.com/<your-username>/blue-ocean-aquarium.git
-cd blue-ocean-aquarium
-```
-
-จากนั้น **ดับเบิลคลิกที่ `index.html`** ได้เลย ไม่ต้องติดตั้งอะไรเพิ่ม
-
-### Option 2 — รันผ่าน Local Server (แนะนำสำหรับการพัฒนา)
-
-```bash
-# Python 3
-python -m http.server 5500
-
-# หรือ Node.js
-npx serve .
-```
-
-แล้วเปิด `http://localhost:5500` ในเบราว์เซอร์
-
 ### 🔑 Demo Login
 
 หน้าล็อกอินเป็นการ **จำลอง** ไม่มีการตรวจสอบจริงและไม่มีการเก็บข้อมูลใด ๆ
@@ -93,44 +70,6 @@ npx serve .
 | Password | `oceanlover` *(กรอกไว้ให้แล้ว)* |
 
 กดปุ่ม **ENTER AQUARIUM** ได้ทันที
-
----
-
-## 🌐 Deploy to GitHub Pages · การนำขึ้นเว็บ
-
-เนื่องจากโปรเจกต์เป็น static ไฟล์เดียว จึงนำขึ้น GitHub Pages ได้ฟรีภายในไม่กี่นาที
-
-### วิธีที่ 1 — ผ่านหน้าเว็บ GitHub (ไม่ต้องใช้คำสั่ง)
-
-1. Push โค้ดขึ้น repository (ต้องมี `index.html` อยู่ที่ **root** ของ repo)
-2. เข้าไปที่ repo → แท็บ **Settings**
-3. เมนูซ้ายมือ เลือก **Pages**
-4. หัวข้อ *Build and deployment* → **Source:** เลือก `Deploy from a branch`
-5. **Branch:** เลือก `main` และโฟลเดอร์ `/ (root)` → กด **Save**
-6. รอประมาณ 1–2 นาที เว็บจะขึ้นที่
-
-   ```
-   https://<your-username>.github.io/<repo-name>/
-   ```
-
-### วิธีที่ 2 — ผ่าน Command Line
-
-```bash
-git init
-git add .
-git commit -m "feat: Blue Ocean interactive aquarium"
-git branch -M main
-git remote add origin https://github.com/<your-username>/blue-ocean-aquarium.git
-git push -u origin main
-```
-
-จากนั้นทำตามขั้นตอนที่ 2–6 ด้านบน
-
-> 💡 **Tip:** เมื่อ deploy เสร็จ อย่าลืมนำลิงก์ไปใส่ในช่อง **About → Website** ของ repo เพื่อให้คนที่เข้ามาดูกดชมได้ทันที และเพิ่ม badge นี้ใน README ได้ด้วย
->
-> ```markdown
-> [![Live Demo](https://img.shields.io/badge/live%20demo-visit-2ec5d3?style=flat-square)](https://<your-username>.github.io/<repo-name>/)
-> ```
 
 ---
 
