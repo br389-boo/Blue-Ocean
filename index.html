@@ -9,7 +9,7 @@
 <!-- ============ GOOGLE FONTS ============ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=Baloo+2:wght@600;700;800&family=Kanit:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 /* =========================================================
@@ -62,14 +62,22 @@
 html{scroll-behavior:smooth;}
 body{
   margin:0;
-  font-family:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-family:'Outfit','Noto Sans Thai',system-ui,-apple-system,'Segoe UI',sans-serif;
   color:var(--white);
   background:var(--deep-0);
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
 }
 body.locked{overflow:hidden;}
-h1,h2,h3,h4{font-family:'Baloo 2','Outfit',cursive,sans-serif;margin:0;line-height:1.12;letter-spacing:.4px;}
+body.th{letter-spacing:0;}
+/* ภาษาไทยไม่ควรมี letter-spacing แบบตัวอักษรละติน */
+body.th .eyebrow,body.th .chip,body.th .btn,body.th .nav-links a,body.th .badge,
+body.th .status-pill,body.th .fact .k,body.th .t-label,body.th .footer h4,
+body.th .login-steps span,body.th .tank-hint,body.th .scroll-cue,body.th .field label,
+body.th .cart-head h3,body.th .product .acts .btn{letter-spacing:.4px;}
+body.th p,body.th .section-sub,body.th .fact .v,body.th .didyouknow p{line-height:1.85;}
+body.th h1,body.th h2,body.th h3{line-height:1.35;}
+h1,h2,h3,h4{font-family:'Baloo 2','Kanit','Noto Sans Thai','Outfit',cursive,sans-serif;margin:0;line-height:1.12;letter-spacing:.4px;}
 p{margin:0;}
 button,input{font-family:inherit;color:inherit;}
 button{cursor:pointer;border:0;background:none;}
@@ -310,6 +318,9 @@ a{color:inherit;text-decoration:none;}
 .icon-btn:hover{background:rgba(126,240,230,.22);transform:translateY(-2px);box-shadow:var(--glow);}
 /* sound toggle states */
 .icon-btn.muted{opacity:.5;}
+/* language switch button */
+.lang-btn{width:auto;min-width:46px;padding:0 .85rem;border-radius:999px;font-size:.72rem;font-weight:600;letter-spacing:1.4px;font-family:'Outfit','Noto Sans Thai',sans-serif;}
+.lang-btn:hover{color:#00202e;background:linear-gradient(120deg,var(--aqua),var(--turquoise));border-color:transparent;}
 .icon-btn.sounding::after{
   content:"";position:absolute;inset:-4px;border-radius:50%;
   border:1px solid rgba(126,240,230,.55);pointer-events:none;
@@ -432,7 +443,7 @@ a{color:inherit;text-decoration:none;}
 @keyframes wobble{from{transform:translateY(0) rotate(-7deg) scale(1);}to{transform:translateY(-10px) rotate(7deg) scale(1.05);}}
 /* generic absolute layer holder */
 .layer{position:absolute;inset:0;}
-.mray{display:block;margin-inline:auto;filter:drop-shadow(0 0 6px rgba(126,240,230,.35));}
+.svg-art{display:block;margin-inline:auto;filter:drop-shadow(0 0 6px rgba(126,240,230,.35));}
 
 /* tank legend */
 .tank-legend{
@@ -727,26 +738,26 @@ a{color:inherit;text-decoration:none;}
   <form class="login-card glass" id="loginForm" autocomplete="off">
     <div class="brand-mark">🐚</div>
     <h1>BLUE <span>OCEAN</span></h1>
-    <p class="tagline">Explore the underwater world</p>
+    <p class="tagline" data-i18n="loginTagline">Explore the underwater world</p>
 
     <div class="field">
-      <label for="email">Email</label>
+      <label for="email" data-i18n="email">Email</label>
       <span class="ico">✉️</span>
       <input type="email" id="email" placeholder="diver@blueocean.com" value="diver@blueocean.com" required />
     </div>
 
     <div class="field">
-      <label for="password">Password</label>
+      <label for="password" data-i18n="password">Password</label>
       <span class="ico">🔒</span>
       <input type="password" id="password" placeholder="••••••••" value="oceanlover" required />
     </div>
 
-    <button class="btn btn-primary" type="submit" id="loginBtn">Enter Aquarium 🌊</button>
+    <button class="btn btn-primary" type="submit" id="loginBtn" data-i18n="enterAquarium">Enter Aquarium 🌊</button>
 
-    <p class="login-hint">Demo mode — no real account needed.<br>🔊 Best experienced with sound on — mute anytime from the menu.</p>
+    <p class="login-hint" data-i18n-html="loginHint">Demo mode — no real account needed.<br>🔊 Best experienced with sound on — mute anytime from the menu.</p>
 
     <div class="login-steps">
-      <span>1 · Login</span><span>2 · Explore</span><span>3 · Learn</span><span>4 · Collect</span>
+      <span data-i18n="step1">1 · Login</span><span data-i18n="step2">2 · Explore</span><span data-i18n="step3">3 · Learn</span><span data-i18n="step4">4 · Collect</span>
     </div>
   </form>
 </div>
@@ -764,14 +775,15 @@ a{color:inherit;text-decoration:none;}
       <button class="icon-btn burger" id="burger" aria-label="Menu">☰</button>
 
       <nav class="nav-links" id="navLinks">
-        <a href="#home" class="active">Home</a>
-        <a href="#aquarium">Explore</a>
-        <a href="#creatures">Creatures</a>
-        <a href="#shop">Shop</a>
-        <a href="#about">About</a>
+        <a href="#home" class="active" data-i18n="navHome">Home</a>
+        <a href="#aquarium" data-i18n="navExplore">Explore</a>
+        <a href="#creatures" data-i18n="navCreatures">Creatures</a>
+        <a href="#shop" data-i18n="navShop">Shop</a>
+        <a href="#about" data-i18n="navAbout">About</a>
       </nav>
 
       <div class="nav-tools">
+        <button class="icon-btn lang-btn" id="langToggle" aria-label="Switch language" title="EN / ไทย">ไทย</button>
         <button class="icon-btn sounding" id="soundToggle" aria-label="Toggle ocean sound" title="Ocean sound on/off">🔊</button>
         <button class="icon-btn" id="searchToggle" aria-label="Search">🔍</button>
         <button class="icon-btn" id="cartToggle" aria-label="Cart">
@@ -780,7 +792,7 @@ a{color:inherit;text-decoration:none;}
         <button class="icon-btn" id="userBtn" aria-label="Account">👤</button>
 
         <div class="nav-search glass" id="navSearch">
-          <input type="text" id="navSearchInput" placeholder="Search creatures…" />
+          <input type="text" id="navSearchInput" data-i18n-ph="searchPh" placeholder="Search creatures…" />
           <button class="icon-btn" id="navSearchGo" aria-label="Go">➜</button>
         </div>
       </div>
@@ -790,29 +802,29 @@ a{color:inherit;text-decoration:none;}
   <!-- ========== 03 · HERO ========== -->
   <section class="hero" id="home">
     <div class="wrap">
-      <p class="eyebrow fade-1" style="justify-content:center">Interactive Online Aquarium</p>
-      <h1 class="fade-2">Dive Into <span class="aqua">The Ocean</span></h1>
-      <p class="fade-3">Discover the mysterious creatures beneath the waves. Tap any creature swimming in the tank to learn its story.</p>
+      <p class="eyebrow fade-1" style="justify-content:center" data-i18n="heroEyebrow">Interactive Online Aquarium</p>
+      <h1 class="fade-2" data-i18n-html="heroTitle">Dive Into <span class="aqua">The Ocean</span></h1>
+      <p class="fade-3" data-i18n="heroSub">Discover the mysterious creatures beneath the waves. Tap any creature swimming in the tank to learn its story.</p>
       <div class="hero-actions fade-4">
-        <a href="#creatures" class="btn btn-primary">Explore Creatures</a>
-        <a href="#shop" class="btn btn-ghost">Visit Gift Shop 🔑</a>
+        <a href="#creatures" class="btn btn-primary" data-i18n="heroCta1">Explore Creatures</a>
+        <a href="#shop" class="btn btn-ghost" data-i18n="heroCta2">Visit Gift Shop 🔑</a>
       </div>
     </div>
-    <div class="scroll-cue"><span class="mouse"></span>Scroll to dive</div>
+    <div class="scroll-cue"><span class="mouse"></span><span data-i18n="scrollCue">Scroll to dive</span></div>
   </section>
 
   <!-- ========== 04 · INTERACTIVE AQUARIUM TANK ========== -->
   <section class="section" id="aquarium">
     <div class="wrap">
       <div class="center reveal" style="margin-bottom:2.2rem">
-        <span class="eyebrow">The Main Tank</span>
-        <h2 class="section-title">Live Aquarium</h2>
-        <p class="section-sub">Twelve ocean creatures share this tank. Hover to see who is passing by — click any of them to open its information card.</p>
+        <span class="eyebrow" data-i18n="tankEyebrow">The Main Tank</span>
+        <h2 class="section-title" data-i18n="tankTitle">Live Aquarium</h2>
+        <p class="section-sub" data-i18n="tankSub">Seventeen ocean creatures share this tank. Hover to see who is passing by — click any of them to open its information card.</p>
       </div>
 
       <div class="tank-shell reveal">
         <div class="tank" id="tank">
-          <div class="tank-hint">👆 Click a creature to learn about it</div>
+          <div class="tank-hint" data-i18n="tankHint">👆 Click a creature to learn about it</div>
           <div class="seabed" id="tankBed"><div class="floor"></div></div>
           <div class="glare"></div>
         </div>
@@ -826,22 +838,22 @@ a{color:inherit;text-decoration:none;}
   <section class="section" id="creatures">
     <div class="wrap">
       <div class="center reveal">
-        <span class="eyebrow">Creature Encyclopedia</span>
-        <h2 class="section-title">Explore Ocean Creatures</h2>
-        <p class="section-sub">Search by name or filter by family. Every card opens a full profile with habitat, diet, lifespan and conservation status.</p>
+        <span class="eyebrow" data-i18n="exploreEyebrow">Creature Encyclopedia</span>
+        <h2 class="section-title" data-i18n="exploreTitle">Explore Ocean Creatures</h2>
+        <p class="section-sub" data-i18n="exploreSub">Search by name or filter by family. Every card opens a full profile with habitat, diet, lifespan and conservation status.</p>
       </div>
 
       <div class="explore-controls glass reveal">
         <div class="search-box">
           <span>🔍</span>
-          <input type="text" id="searchInput" placeholder="Search creatures…" />
+          <input type="text" id="searchInput" data-i18n-ph="searchPh" placeholder="Search creatures…" />
         </div>
         <div class="filters" id="filters">
-          <button class="chip active" data-cat="all">All</button>
-          <button class="chip" data-cat="fish">Fish</button>
-          <button class="chip" data-cat="mammal">Mammals</button>
-          <button class="chip" data-cat="reptile">Reptiles</button>
-          <button class="chip" data-cat="invertebrate">Invertebrates</button>
+          <button class="chip active" data-cat="all" data-i18n="catAll">All</button>
+          <button class="chip" data-cat="fish" data-i18n="catFish">Fish</button>
+          <button class="chip" data-cat="mammal" data-i18n="catMammal">Mammals</button>
+          <button class="chip" data-cat="reptile" data-i18n="catReptile">Reptiles</button>
+          <button class="chip" data-cat="invertebrate" data-i18n="catInvert">Invertebrates</button>
         </div>
       </div>
 
@@ -853,9 +865,9 @@ a{color:inherit;text-decoration:none;}
   <section class="section" id="shop">
     <div class="wrap">
       <div class="center reveal">
-        <span class="eyebrow">Gift Shop</span>
-        <h2 class="section-title">Take A Piece Of The Ocean Home</h2>
-        <p class="section-sub">Bring your favourite ocean creature with you. Every keychain supports marine conservation programmes.</p>
+        <span class="eyebrow" data-i18n="shopEyebrow">Gift Shop</span>
+        <h2 class="section-title" data-i18n="shopTitle">Take A Piece Of The Ocean Home</h2>
+        <p class="section-sub" data-i18n="shopSub">Bring your favourite ocean creature with you. Every keychain supports marine conservation programmes.</p>
       </div>
       <div class="shop-grid reveal" id="shopGrid" style="margin-top:2.6rem"></div>
     </div>
@@ -865,26 +877,26 @@ a{color:inherit;text-decoration:none;}
   <section class="section" id="about">
     <div class="wrap">
       <div class="conserve glass reveal">
-        <span class="eyebrow" style="justify-content:center">Conservation</span>
-        <h2 class="section-title">Protect Our Ocean</h2>
-        <p class="section-sub center" style="margin-inline:auto">Every creature has a role in the ocean ecosystem. Learn, explore and help protect our blue planet.</p>
+        <span class="eyebrow" style="justify-content:center" data-i18n="consEyebrow">Conservation</span>
+        <h2 class="section-title" data-i18n="consTitle">Protect Our Ocean</h2>
+        <p class="section-sub center" style="margin-inline:auto" data-i18n="consSub">Every creature has a role in the ocean ecosystem. Learn, explore and help protect our blue planet.</p>
 
         <div class="stats" id="stats">
           <div class="stat">
             <div class="num" data-count="70" data-suffix="%">0%</div>
-            <p class="label">of Earth's surface is covered by ocean</p>
+            <p class="label" data-i18n="stat1">of Earth's surface is covered by ocean</p>
           </div>
           <div class="stat">
             <div class="num" data-count="80" data-suffix="%+">0%</div>
-            <p class="label">of marine species remain unexplored</p>
+            <p class="label" data-i18n="stat2">of marine species remain unexplored</p>
           </div>
           <div class="stat">
-            <div class="num" data-count="1" data-suffix=" Ocean">0</div>
-            <p class="label">One planet. One responsibility.</p>
+            <div class="num" data-count="1" data-suffix-key="oceanSuffix" data-suffix=" Ocean">0</div>
+            <p class="label" data-i18n="stat3">One planet. One responsibility.</p>
           </div>
         </div>
 
-        <button class="btn btn-primary" id="learnMore">Learn More 💙</button>
+        <button class="btn btn-primary" id="learnMore" data-i18n="learnMore">Learn More 💙</button>
       </div>
     </div>
   </section>
@@ -895,7 +907,7 @@ a{color:inherit;text-decoration:none;}
       <div class="footer-grid">
         <div>
           <div class="brand-line">BLUE <span>OCEAN</span></div>
-          <p>Explore. Learn. Protect.<br>An interactive online aquarium built to make the deep sea feel a little closer to home.</p>
+          <p data-i18n-html="footerAbout">Explore. Learn. Protect.<br>An interactive online aquarium built to make the deep sea feel a little closer to home.</p>
           <div class="socials">
             <a href="#home" aria-label="Instagram">📸</a>
             <a href="#home" aria-label="Facebook">📘</a>
@@ -903,25 +915,25 @@ a{color:inherit;text-decoration:none;}
           </div>
         </div>
         <div>
-          <h4>Menu</h4>
+          <h4 data-i18n="footerMenu">Menu</h4>
           <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#creatures">Creatures</a></li>
-            <li><a href="#shop">Shop</a></li>
-            <li><a href="#about">About</a></li>
+            <li><a href="#home" data-i18n="navHome">Home</a></li>
+            <li><a href="#creatures" data-i18n="navCreatures">Creatures</a></li>
+            <li><a href="#shop" data-i18n="navShop">Shop</a></li>
+            <li><a href="#about" data-i18n="navAbout">About</a></li>
           </ul>
         </div>
         <div>
-          <h4>Visit</h4>
+          <h4 data-i18n="footerVisit">Visit</h4>
           <ul>
-            <li><a href="#aquarium">Main Tank</a></li>
-            <li><a href="#creatures">Encyclopedia</a></li>
-            <li><a href="#shop">Gift Shop</a></li>
-            <li><a href="#about">Conservation</a></li>
+            <li><a href="#aquarium" data-i18n="fMainTank">Main Tank</a></li>
+            <li><a href="#creatures" data-i18n="fEncyclopedia">Encyclopedia</a></li>
+            <li><a href="#shop" data-i18n="fGiftShop">Gift Shop</a></li>
+            <li><a href="#about" data-i18n="fConservation">Conservation</a></li>
           </ul>
         </div>
       </div>
-      <div class="copyright">© 2026 Blue Ocean Aquarium · Made with 💙 for the sea</div>
+      <div class="copyright" data-i18n="copyright">© 2026 Blue Ocean Aquarium · Made with 💙 for the sea</div>
     </div>
   </footer>
 </div>
@@ -940,10 +952,10 @@ a{color:inherit;text-decoration:none;}
   <div class="modal glass checkout-modal" role="dialog" aria-modal="true">
     <button class="modal-close" data-close-checkout>✕</button>
     <span class="big-emoji">🐬</span>
-    <h2 style="margin-top:.6rem">Order Confirmed</h2>
-    <p class="section-sub center" style="margin-inline:auto">Thank you for supporting ocean conservation 💙</p>
+    <h2 style="margin-top:.6rem" data-i18n="orderConfirmed">Order Confirmed</h2>
+    <p class="section-sub center" style="margin-inline:auto" data-i18n="thankYou">Thank you for supporting ocean conservation 💙</p>
     <div class="receipt" id="receipt"></div>
-    <button class="btn btn-primary" data-close-checkout style="width:100%">Continue Exploring</button>
+    <button class="btn btn-primary" data-close-checkout style="width:100%" data-i18n="continueExploring">Continue Exploring</button>
   </div>
 </div>
 
@@ -953,17 +965,17 @@ a{color:inherit;text-decoration:none;}
 <div class="cart-backdrop" id="cartBackdrop"></div>
 <aside class="cart" id="cart" aria-label="Shopping cart">
   <div class="cart-head">
-    <h3>🛒 Your Cart</h3>
+    <h3 data-i18n="cartTitle">🛒 Your Cart</h3>
     <button class="icon-btn" id="cartClose" aria-label="Close cart">✕</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-foot">
     <div class="cart-total">
-      <span class="t-label">Total</span>
+      <span class="t-label" data-i18n="cartTotal">Total</span>
       <span class="t-value" id="cartTotal">฿0</span>
     </div>
-    <button class="btn btn-primary" id="checkoutBtn">Checkout</button>
-    <p class="cart-note">10% of every order goes to reef restoration.</p>
+    <button class="btn btn-primary" id="checkoutBtn" data-i18n="checkout">Checkout</button>
+    <p class="cart-note" data-i18n="cartNote">10% of every order goes to reef restoration.</p>
   </div>
 </aside>
 
@@ -973,32 +985,66 @@ a{color:inherit;text-decoration:none;}
 /* =========================================================
    BLUE OCEAN — Application script (Vanilla JS, no build step)
    ---------------------------------------------------------
-   A. Creature dataset
-   B. Helpers
-   C. Ambient ocean (bubbles, particles, rays, seabed, bg fish)
-   D. Sound engine (Web Audio API — synthesised, no audio files)
-   E. Login transition
-   F. Navigation (menu, search, scroll spy, parallax)
-   F2. UI sound wiring (mute toggle + click sounds)
-   G. Interactive aquarium tank
-   H. Explore grid: search + category filter
-   I. Creature modal
-   J. Keychain shop
-   K. Cart (add / qty / remove / total) + checkout
-   L. Animated counters + scroll reveal
+   TABLE OF CONTENTS
+   A. Inline SVG artwork (creatures with no reliable emoji)
+   B. Creature dataset (EN + TH)
+   C. Language dictionary (i18n)
+   D. Helpers
+   E. Ambient ocean visuals
+   F. Sound engine (Web Audio API — synthesised, no audio files)
+   G. Login transition
+   H. Navigation (menu, search, scroll spy, parallax)
+   H2. UI sound wiring (mute toggle + click sounds)
+   H3. Language switch (EN ⇄ TH)
+   I. Interactive aquarium tank
+   J. Explore grid: search + category filter
+   K. Creature modal
+   L. Keychain shop
+   M. Cart (add / qty / remove / total) + checkout
+   N. Animated counters + scroll reveal
    ========================================================= */
 (function () {
   'use strict';
 
-  /* ===== A. CREATURE DATASET =============================== */
-  // Manta ray has no emoji, so it gets a small inline SVG illustration.
+  /* ===== A. INLINE SVG ARTWORK =============================
+     ยูนิโค้ดไม่มีอิโมจิ "ม้าน้ำ" และเครื่องจำนวนมากไม่มีฟอนต์ของ
+     "แมวน้ำ" 🦭 / "กระเบนราหู" จึงวาดสามตัวนี้เป็น SVG แทน
+     เพื่อให้แสดงผลเหมือนกันทุกเครื่องและทุกระบบปฏิบัติการ
+     ========================================================= */
   const MANTA_SVG =
-    '<svg class="mray" viewBox="0 0 120 84" style="width:1.5em;height:1.05em" aria-hidden="true">' +
-    '<path d="M60 6c15 0 27 15 54 34-21 4-36 12-54 27-18-15-33-23-54-27C33 21 45 6 60 6z" fill="#63d2e8"/>' +
-    '<path d="M60 60c6 6 8 12 8 20l-8-6-8 6c0-8 2-14 8-20z" fill="#3fb4cf"/>' +
-    '<circle cx="50" cy="26" r="3.4" fill="#04263a"/><circle cx="70" cy="26" r="3.4" fill="#04263a"/>' +
+    '<svg class="svg-art" viewBox="0 0 120 84" style="width:1.5em;height:1.05em" aria-hidden="true">' +
+      '<path d="M60 6c15 0 27 15 54 34-21 4-36 12-54 27-18-15-33-23-54-27C33 21 45 6 60 6z" fill="#63d2e8"/>' +
+      '<path d="M60 60c6 6 8 12 8 20l-8-6-8 6c0-8 2-14 8-20z" fill="#3fb4cf"/>' +
+      '<circle cx="50" cy="26" r="3.4" fill="#04263a"/><circle cx="70" cy="26" r="3.4" fill="#04263a"/>' +
     '</svg>';
 
+  const SEAHORSE_SVG =
+    '<svg class="svg-art" viewBox="0 0 76 108" style="width:.8em;height:1.14em" aria-hidden="true">' +
+      '<path d="M22 40q-13 11-8 27 11-8 14-21z" fill="#ffe0a3" opacity=".9"/>' +        /* dorsal fin */
+      '<path d="M40 15l3-10 6 9z" fill="#e08b2c"/>' +                                    /* coronet */
+      '<path d="M44 24C31 23 23 33 27 45c3 10 12 14 12 24" fill="none" stroke="#f2a341" ' +
+        'stroke-width="15" stroke-linecap="round"/>' +                                   /* head + body */
+      '<path d="M39 69c0 9-10 12-12 20-2 7 6 11 10 6 3-4-1-8-5-5" fill="none" ' +
+        'stroke="#f2a341" stroke-width="9.5" stroke-linecap="round"/>' +                 /* curled tail */
+      '<path d="M50 18l21 6-21 6z" fill="#e08b2c"/>' +                                   /* snout */
+      '<ellipse cx="36" cy="34" rx="6" ry="4" fill="#ffcf7f" transform="rotate(28 36 34)"/>' +
+      '<circle cx="45" cy="21" r="2.9" fill="#3a1d05"/>' +
+    '</svg>';
+
+  const SEAL_SVG =
+    '<svg class="svg-art" viewBox="0 0 124 74" style="width:1.55em;height:.93em" aria-hidden="true">' +
+      '<path d="M96 30c10 6 18 14 22 22-10 2-19-1-26-7z" fill="#8fa2b0"/>' +              /* tail flipper */
+      '<path d="M26 40C26 24 40 15 56 18c20 4 40 14 52 28-12 10-30 14-48 14-20 0-32-8-34-20z" fill="#b3c3ce"/>' +
+      '<path d="M58 52c12 8 24 10 34 6-8-8-22-11-34-6z" fill="#94a7b4"/>' +               /* front flipper */
+      '<circle cx="37" cy="34" r="3.2" fill="#22303a"/><circle cx="51" cy="32" r="3.2" fill="#22303a"/>' +
+      '<ellipse cx="28" cy="41" rx="4.2" ry="3.1" fill="#42535f"/>' +
+      '<path d="M22 44l-9 3M22 47l-8 5" stroke="#42535f" stroke-width="1.5" stroke-linecap="round" fill="none"/>' +
+    '</svg>';
+
+  /* ===== B. CREATURE DATASET ===============================
+     แต่ละตัวเก็บข้อมูลภาษาอังกฤษไว้ที่ระดับบนสุด และภาษาไทยไว้ใน
+     คีย์ `th` เพื่อให้ปุ่มสลับภาษาเรียกใช้ได้ทันทีโดยไม่ต้องแปลสด
+     ========================================================= */
   const CREATURES = [
     {
       id: 'clownfish', name: 'Clownfish', thai: 'ปลาการ์ตูน', sci: 'Amphiprion ocellaris',
@@ -1007,6 +1053,11 @@ a{color:inherit;text-decoration:none;}
       lifespan: '6–10 years', size: '10–18 cm',
       status: 'Least Concern', statusClass: 'safe',
       fact: 'Clownfish can live safely among sea anemones — a layer of mucus protects them from the stinging tentacles, and in return they chase away the anemone’s predators.',
+      th: {
+        habitat: 'แนวปะการัง (อินโด-แปซิฟิก)', diet: 'กินทั้งพืชและสัตว์ — สาหร่ายและแพลงก์ตอน',
+        lifespan: '6–10 ปี', size: '10–18 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'ปลาการ์ตูนอาศัยอยู่กับดอกไม้ทะเลได้อย่างปลอดภัย เพราะมีเมือกเคลือบตัวป้องกันเข็มพิษ และมันจะช่วยไล่ศัตรูของดอกไม้ทะเลเป็นการตอบแทน'
+      },
       motion: 'swim', top: 66, dur: 15, dir: 'ltr', size2: '2.1rem'
     },
     {
@@ -1016,6 +1067,11 @@ a{color:inherit;text-decoration:none;}
       lifespan: '8–20 years', size: '25–31 cm',
       status: 'Least Concern', statusClass: 'safe',
       fact: 'A blue tang carries a scalpel-sharp spine near its tail. It stays folded away until the fish needs to defend itself.',
+      th: {
+        habitat: 'แนวปะการังอินโด-แปซิฟิก', diet: 'กินพืช — สาหร่ายและแพลงก์ตอน',
+        lifespan: '8–20 ปี', size: '25–31 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'ปลาแท็งก์สีน้ำเงินมีเงี่ยงคมกริบซ่อนอยู่ใกล้โคนหาง ปกติจะพับเก็บไว้ และกางออกเฉพาะตอนต้องป้องกันตัว'
+      },
       motion: 'swim', top: 46, dur: 17, dir: 'rtl', size2: '2.2rem'
     },
     {
@@ -1025,7 +1081,12 @@ a{color:inherit;text-decoration:none;}
       lifespan: '50+ years', size: '1–1.2 m · up to 160 kg',
       status: 'Endangered', statusClass: 'danger',
       fact: 'Sea turtles can travel thousands of kilometres across the ocean, and females return to the very beach where they hatched to lay their own eggs.',
-      motion: 'swim', top: 55, dur: 38, dir: 'ltr', size2: '3rem'
+      th: {
+        habitat: 'มหาสมุทรเขตร้อนและกึ่งเขตร้อน', diet: 'หญ้าทะเลและสาหร่าย',
+        lifespan: 'มากกว่า 50 ปี', size: '1–1.2 ม. · หนักถึง 160 กก.', status: 'ใกล้สูญพันธุ์',
+        fact: 'เต่าทะเลเดินทางข้ามมหาสมุทรได้หลายพันกิโลเมตร และตัวเมียจะกลับมาวางไข่ที่ชายหาดเดียวกับที่ตัวเองฟักออกมา'
+      },
+      motion: 'swim', top: 54, dur: 38, dir: 'ltr', size2: '3rem'
     },
     {
       id: 'jellyfish', name: 'Moon Jellyfish', thai: 'แมงกะพรุนพระจันทร์', sci: 'Aurelia aurita',
@@ -1034,16 +1095,26 @@ a{color:inherit;text-decoration:none;}
       lifespan: '1–2 years', size: '25–40 cm bell',
       status: 'Least Concern', statusClass: 'safe',
       fact: 'Some jellyfish species are capable of bioluminescence — they glow in the dark water to startle predators or lure prey.',
+      th: {
+        habitat: 'มหาสมุทรทั่วโลก', diet: 'แพลงก์ตอนและปลาขนาดเล็ก',
+        lifespan: '1–2 ปี', size: 'ร่มกว้าง 25–40 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'แมงกะพรุนบางชนิดเรืองแสงได้เอง เพื่อทำให้ผู้ล่าตกใจหรือล่อเหยื่อให้เข้ามาใกล้'
+      },
       motion: 'float', top: 14, left: 16, size2: '2.7rem'
     },
     {
       id: 'seahorse', name: 'Seahorse', thai: 'ม้าน้ำ', sci: 'Hippocampus',
-      emoji: '🐴', cat: 'fish', price: 169,
+      svg: SEAHORSE_SVG, cat: 'fish', price: 169,
       habitat: 'Seagrass beds & coral reefs', diet: 'Tiny crustaceans',
       lifespan: '1–5 years', size: '2–35 cm',
       status: 'Vulnerable', statusClass: 'warn',
       fact: 'Male seahorses carry the eggs. The female deposits them into his pouch, and he gives birth to hundreds of tiny fry weeks later.',
-      motion: 'bed', top: 58, left: 84, size2: '2.1rem'
+      th: {
+        habitat: 'แหล่งหญ้าทะเลและแนวปะการัง', diet: 'สัตว์จำพวกกุ้งขนาดจิ๋ว',
+        lifespan: '1–5 ปี', size: '2–35 ซม.', status: 'เสี่ยงต่อการสูญพันธุ์',
+        fact: 'ม้าน้ำตัวผู้เป็นฝ่ายตั้งท้อง ตัวเมียจะฝากไข่ไว้ในถุงหน้าท้องของตัวผู้ แล้วตัวผู้จะคลอดลูกออกมาหลายร้อยตัว'
+      },
+      motion: 'bed', top: 56, left: 86, size2: '2.4rem'
     },
     {
       id: 'octopus', name: 'Common Octopus', thai: 'ปลาหมึกยักษ์', sci: 'Octopus vulgaris',
@@ -1052,16 +1123,26 @@ a{color:inherit;text-decoration:none;}
       lifespan: '1–2 years', size: '30–90 cm',
       status: 'Least Concern', statusClass: 'safe',
       fact: 'Octopuses have three hearts and blue blood — and they can change both colour and skin texture in under a second.',
-      motion: 'bed', top: 74, left: 28, size2: '2.8rem'
+      th: {
+        habitat: 'มหาสมุทรทั่วโลก', diet: 'ปู ปลา และหอย',
+        lifespan: '1–2 ปี', size: '30–90 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'ปลาหมึกยักษ์มีหัวใจ 3 ดวงและเลือดสีฟ้า ทั้งยังเปลี่ยนสีและพื้นผิวของผิวหนังได้ภายในเสี้ยววินาที'
+      },
+      motion: 'bed', top: 74, left: 24, size2: '2.8rem'
     },
     {
       id: 'manta', name: 'Manta Ray', thai: 'ปลากระเบนราหู', sci: 'Mobula birostris',
-      svg: MANTA_SVG, emoji: '🥏', cat: 'fish', price: 189,
+      svg: MANTA_SVG, cat: 'fish', price: 189,
       habitat: 'Tropical & temperate oceans', diet: 'Plankton (filter feeder)',
       lifespan: '40–50 years', size: 'Wingspan up to 7 m',
       status: 'Endangered', statusClass: 'danger',
       fact: 'Manta rays can have wingspans of several metres, and each one has a spot pattern on its belly as unique as a fingerprint.',
-      motion: 'swim', top: 30, dur: 28, dir: 'ltr', size2: '2.6rem'
+      th: {
+        habitat: 'มหาสมุทรเขตร้อนและเขตอบอุ่น', diet: 'แพลงก์ตอน (กรองกิน)',
+        lifespan: '40–50 ปี', size: 'ปีกกว้างถึง 7 ม.', status: 'ใกล้สูญพันธุ์',
+        fact: 'ปลากระเบนราหูมีปีกกว้างได้หลายเมตร และลายจุดใต้ท้องของแต่ละตัวไม่ซ้ำกันเลยเหมือนลายนิ้วมือ'
+      },
+      motion: 'swim', top: 28, dur: 28, dir: 'ltr', size2: '2.6rem'
     },
     {
       id: 'shark', name: 'Reef Shark', thai: 'ฉลามครีบดำ', sci: 'Carcharhinus melanopterus',
@@ -1070,7 +1151,12 @@ a{color:inherit;text-decoration:none;}
       lifespan: '25+ years', size: '1.6–2 m',
       status: 'Vulnerable', statusClass: 'warn',
       fact: 'Sharks never stop growing teeth — some species replace more than 30,000 of them in a lifetime.',
-      motion: 'swim', top: 12, dur: 24, dir: 'ltr', size2: '3.2rem'
+      th: {
+        habitat: 'แนวปะการังน้ำตื้นและลากูน', diet: 'กินเนื้อ — ปลาและหมึก',
+        lifespan: 'มากกว่า 25 ปี', size: '1.6–2 ม.', status: 'เสี่ยงต่อการสูญพันธุ์',
+        fact: 'ฉลามสร้างฟันใหม่ตลอดชีวิต บางชนิดผลัดฟันมากกว่า 30,000 ซี่ตลอดช่วงชีวิตของมัน'
+      },
+      motion: 'swim', top: 10, dur: 24, dir: 'ltr', size2: '3.2rem'
     },
     {
       id: 'dolphin', name: 'Bottlenose Dolphin', thai: 'โลมาปากขวด', sci: 'Tursiops truncatus',
@@ -1079,7 +1165,26 @@ a{color:inherit;text-decoration:none;}
       lifespan: '40–60 years', size: '2–4 m',
       status: 'Least Concern', statusClass: 'safe',
       fact: 'Dolphins call each other by name — every dolphin invents a signature whistle as a calf and keeps it for life.',
-      motion: 'swim', top: 40, dur: 20, dir: 'rtl', size2: '3rem'
+      th: {
+        habitat: 'ทะเลเขตอบอุ่นและเขตร้อน', diet: 'ปลาและหมึก',
+        lifespan: '40–60 ปี', size: '2–4 ม.', status: 'กังวลน้อยที่สุด',
+        fact: 'โลมาเรียกชื่อกันได้ ลูกโลมาจะคิดค้นเสียงหวีดประจำตัวขึ้นมาตั้งแต่ยังเล็กและใช้มันไปตลอดชีวิต'
+      },
+      motion: 'swim', top: 38, dur: 20, dir: 'rtl', size2: '3rem'
+    },
+    {
+      id: 'seal', name: 'Harbour Seal', thai: 'แมวน้ำท่าเรือ', sci: 'Phoca vitulina',
+      svg: SEAL_SVG, cat: 'mammal', price: 209,
+      habitat: 'Cold coastal waters', diet: 'Fish, squid & crustaceans',
+      lifespan: '25–30 years', size: '1.5–1.9 m',
+      status: 'Least Concern', statusClass: 'safe',
+      fact: 'Seals can slow their heart to just a few beats per minute, letting them stay underwater for almost 30 minutes on a single breath.',
+      th: {
+        habitat: 'น่านน้ำชายฝั่งเขตหนาว', diet: 'ปลา หมึก และสัตว์จำพวกกุ้ง',
+        lifespan: '25–30 ปี', size: '1.5–1.9 ม.', status: 'กังวลน้อยที่สุด',
+        fact: 'แมวน้ำชะลอการเต้นของหัวใจให้เหลือเพียงไม่กี่ครั้งต่อนาทีได้ จึงกลั้นหายใจอยู่ใต้น้ำได้นานเกือบ 30 นาที'
+      },
+      motion: 'swim', top: 34, dur: 26, dir: 'ltr', size2: '2.9rem'
     },
     {
       id: 'whale', name: 'Humpback Whale', thai: 'วาฬหลังค่อม', sci: 'Megaptera novaeangliae',
@@ -1088,7 +1193,68 @@ a{color:inherit;text-decoration:none;}
       lifespan: '80–90 years', size: '14–17 m · up to 30 tonnes',
       status: 'Least Concern', statusClass: 'safe',
       fact: 'Humpback songs can travel for hundreds of kilometres underwater, and every population sings its own evolving melody.',
-      motion: 'swim', top: 22, dur: 36, dir: 'rtl', size2: '4.2rem'
+      th: {
+        habitat: 'มหาสมุทรหลักทั่วโลก', diet: 'เคยและปลาฝูงขนาดเล็ก',
+        lifespan: '80–90 ปี', size: '14–17 ม. · หนักถึง 30 ตัน', status: 'กังวลน้อยที่สุด',
+        fact: 'เสียงร้องของวาฬหลังค่อมเดินทางใต้น้ำได้ไกลหลายร้อยกิโลเมตร และแต่ละฝูงมีทำนองเพลงเป็นของตัวเองที่เปลี่ยนไปทุกปี'
+      },
+      motion: 'swim', top: 20, dur: 36, dir: 'rtl', size2: '4.2rem'
+    },
+    {
+      id: 'squid', name: 'Reef Squid', thai: 'หมึกกล้วย', sci: 'Sepioteuthis lessoniana',
+      emoji: '🦑', cat: 'invertebrate', price: 169,
+      habitat: 'Shallow coastal reefs', diet: 'Small fish & crustaceans',
+      lifespan: 'Under 1 year', size: '20–40 cm mantle',
+      status: 'Least Concern', statusClass: 'safe',
+      fact: 'Squid escape by firing a cloud of ink and jetting backwards — and their skin can flash through a whole range of colours in less than a second.',
+      th: {
+        habitat: 'แนวปะการังชายฝั่งน้ำตื้น', diet: 'ปลาเล็กและสัตว์จำพวกกุ้ง',
+        lifespan: 'ไม่ถึง 1 ปี', size: 'ลำตัวยาว 20–40 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'หมึกหนีศัตรูด้วยการพ่นหมึกเป็นม่านควันแล้วพุ่งถอยหลังอย่างรวดเร็ว ทั้งยังเปลี่ยนสีผิวได้ในเวลาไม่ถึงหนึ่งวินาที'
+      },
+      motion: 'swim', top: 44, dur: 30, dir: 'ltr', size2: '2.5rem'
+    },
+    {
+      id: 'shrimp', name: 'Cleaner Shrimp', thai: 'กุ้งทำความสะอาด', sci: 'Lysmata amboinensis',
+      emoji: '🦐', cat: 'invertebrate', price: 129,
+      habitat: 'Coral reefs', diet: 'Parasites & dead tissue',
+      lifespan: '2–3 years', size: '5–6 cm',
+      status: 'Least Concern', statusClass: 'safe',
+      fact: 'Cleaner shrimp run "cleaning stations" on the reef — fish queue up and open their mouths so the shrimp can pick the parasites off them.',
+      th: {
+        habitat: 'แนวปะการัง', diet: 'ปรสิตและเนื้อเยื่อที่ตายแล้ว',
+        lifespan: '2–3 ปี', size: '5–6 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'กุ้งทำความสะอาดเปิด "สถานีทำความสะอาด" อยู่บนแนวปะการัง ปลาจะมาต่อคิวและอ้าปากให้กุ้งเก็บปรสิตออกให้'
+      },
+      motion: 'swim', top: 70, dur: 19, dir: 'rtl', size2: '1.9rem'
+    },
+    {
+      id: 'lobster', name: 'Spiny Lobster', thai: 'กุ้งมังกร', sci: 'Panulirus',
+      emoji: '🦞', cat: 'invertebrate', price: 179,
+      habitat: 'Rocky seabed & crevices', diet: 'Molluscs, worms & crabs',
+      lifespan: '50+ years', size: '30–60 cm',
+      status: 'Least Concern', statusClass: 'safe',
+      fact: 'A lobster tastes with its legs and can regrow a lost claw. Some individuals have been recorded living for more than a century.',
+      th: {
+        habitat: 'พื้นทะเลหินและซอกหลืบ', diet: 'หอย หนอนทะเล และปู',
+        lifespan: 'มากกว่า 50 ปี', size: '30–60 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'กุ้งมังกรรับรสด้วยขา และงอกก้ามใหม่ได้เมื่อสูญเสียไป บางตัวมีบันทึกว่ามีอายุยืนเกินร้อยปี'
+      },
+      motion: 'bed', top: 78, left: 70, size2: '2.4rem'
+    },
+    {
+      id: 'crab', name: 'Blue Swimming Crab', thai: 'ปูม้า', sci: 'Portunus pelagicus',
+      emoji: '🦀', cat: 'invertebrate', price: 149,
+      habitat: 'Sandy seabed & seagrass', diet: 'Molluscs, small fish & algae',
+      lifespan: '3–4 years', size: '15–20 cm shell',
+      status: 'Least Concern', statusClass: 'safe',
+      fact: 'Blue swimming crabs paddle with flattened back legs, and they moult their entire shell to grow — walking around soft and defenceless until the new one hardens.',
+      th: {
+        habitat: 'พื้นทรายและแหล่งหญ้าทะเล', diet: 'หอย ปลาเล็ก และสาหร่าย',
+        lifespan: '3–4 ปี', size: 'กระดองกว้าง 15–20 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'ปูม้าว่ายน้ำด้วยขาคู่หลังที่แบนเหมือนใบพาย และต้องลอกคราบทั้งตัวเพื่อเติบโต ช่วงนั้นตัวจะนิ่มจนกว่ากระดองใหม่จะแข็ง'
+      },
+      motion: 'bed', top: 82, left: 40, size2: '2.2rem'
     },
     {
       id: 'starfish', name: 'Sea Star', thai: 'ปลาดาว', sci: 'Asteroidea',
@@ -1097,7 +1263,12 @@ a{color:inherit;text-decoration:none;}
       lifespan: '5–35 years', size: '12–25 cm',
       status: 'Least Concern', statusClass: 'safe',
       fact: 'Sea stars have no brain and no blood — and many can regrow a whole body from a single lost arm.',
-      motion: 'bed', top: 80, left: 60, size2: '2.3rem'
+      th: {
+        habitat: 'พื้นทะเล แอ่งน้ำขึ้นน้ำลง และแนวปะการัง', diet: 'หอยและเศษอินทรีย์',
+        lifespan: '5–35 ปี', size: '12–25 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'ปลาดาวไม่มีสมองและไม่มีเลือด และหลายชนิดงอกร่างใหม่ทั้งตัวได้จากแขนที่ขาดไปเพียงข้างเดียว'
+      },
+      motion: 'bed', top: 80, left: 56, size2: '2.3rem'
     },
     {
       id: 'pufferfish', name: 'Pufferfish', thai: 'ปลาปักเป้า', sci: 'Tetraodontidae',
@@ -1106,22 +1277,147 @@ a{color:inherit;text-decoration:none;}
       lifespan: '5–10 years', size: '2.5–60 cm',
       status: 'Least Concern', statusClass: 'safe',
       fact: 'A pufferfish inflates by gulping water until it is several times its normal size — far too spiky a mouthful for most predators.',
+      th: {
+        habitat: 'น้ำตื้นเขตอบอุ่นและแนวปะการัง', diet: 'สาหร่าย หอย และสัตว์ไม่มีกระดูกสันหลัง',
+        lifespan: '5–10 ปี', size: '2.5–60 ซม.', status: 'กังวลน้อยที่สุด',
+        fact: 'ปลาปักเป้าพองตัวด้วยการกลืนน้ำจนใหญ่กว่าเดิมหลายเท่า กลายเป็นก้อนหนามที่ผู้ล่าส่วนใหญ่กลืนไม่ลง'
+      },
       motion: 'swim', top: 60, dur: 22, dir: 'rtl', size2: '2.3rem'
     }
   ];
 
   // Products shown in the gift shop (all reference a creature above).
-  const SHOP_IDS = ['turtle', 'octopus', 'dolphin', 'jellyfish', 'clownfish', 'shark', 'starfish', 'seahorse'];
+  const SHOP_IDS = ['turtle', 'octopus', 'dolphin', 'jellyfish', 'clownfish', 'shark', 'starfish', 'seahorse', 'crab'];
 
-  const CAT_LABEL = { fish: 'Fish', mammal: 'Mammal', reptile: 'Reptile', invertebrate: 'Invertebrate' };
+  /* ===== C. LANGUAGE DICTIONARY (i18n) =====================
+     ทุกข้อความคงที่ในหน้าเว็บติด data-i18n="key" ไว้ ฟังก์ชัน
+     applyLang() จะไล่เปลี่ยนข้อความทั้งหมดในครั้งเดียว
+     ========================================================= */
+  const I18N = {
+    en: {
+      loginTagline: 'Explore the underwater world',
+      email: 'Email', password: 'Password', enterAquarium: 'Enter Aquarium 🌊',
+      loginHint: 'Demo mode — no real account needed.<br>🔊 Best experienced with sound on — mute anytime from the menu.',
+      step1: '1 · Login', step2: '2 · Explore', step3: '3 · Learn', step4: '4 · Collect',
+      navHome: 'Home', navExplore: 'Explore', navCreatures: 'Creatures', navShop: 'Shop', navAbout: 'About',
+      heroEyebrow: 'Interactive Online Aquarium',
+      heroTitle: 'Dive Into <span class="aqua">The Ocean</span>',
+      heroSub: 'Discover the mysterious creatures beneath the waves. Tap any creature swimming in the tank to learn its story.',
+      heroCta1: 'Explore Creatures', heroCta2: 'Visit Gift Shop 🔑', scrollCue: 'Scroll to dive',
+      tankEyebrow: 'The Main Tank', tankTitle: 'Live Aquarium',
+      tankSub: 'Seventeen ocean creatures share this tank. Hover to see who is passing by — click any of them to open its information card.',
+      tankHint: '👆 Click a creature to learn about it',
+      exploreEyebrow: 'Creature Encyclopedia', exploreTitle: 'Explore Ocean Creatures',
+      exploreSub: 'Search by name or filter by family. Every card opens a full profile with habitat, diet, lifespan and conservation status.',
+      searchPh: 'Search creatures…',
+      catAll: 'All', catFish: 'Fish', catMammal: 'Mammals', catReptile: 'Reptiles', catInvert: 'Invertebrates',
+      shopEyebrow: 'Gift Shop', shopTitle: 'Take A Piece Of The Ocean Home',
+      shopSub: 'Bring your favourite ocean creature with you. Every keychain supports marine conservation programmes.',
+      consEyebrow: 'Conservation', consTitle: 'Protect Our Ocean',
+      consSub: 'Every creature has a role in the ocean ecosystem. Learn, explore and help protect our blue planet.',
+      stat1: 'of Earth’s surface is covered by ocean',
+      stat2: 'of marine species remain unexplored',
+      stat3: 'One planet. One responsibility.',
+      oceanSuffix: ' Ocean', learnMore: 'Learn More 💙',
+      footerAbout: 'Explore. Learn. Protect.<br>An interactive online aquarium built to make the deep sea feel a little closer to home.',
+      footerMenu: 'Menu', footerVisit: 'Visit',
+      fMainTank: 'Main Tank', fEncyclopedia: 'Encyclopedia', fGiftShop: 'Gift Shop', fConservation: 'Conservation',
+      copyright: '© 2026 Blue Ocean Aquarium · Made with 💙 for the sea',
+      cartTitle: '🛒 Your Cart', cartTotal: 'Total', checkout: 'Checkout',
+      cartNote: '10% of every order goes to reef restoration.',
+      cartEmpty: 'Your cart is empty.<br>Pick a creature from the gift shop below.',
+      orderConfirmed: 'Order Confirmed',
+      thankYou: 'Thank you for supporting ocean conservation 💙',
+      continueExploring: 'Continue Exploring',
+      habitat: 'Habitat', diet: 'Diet', lifespan: 'Lifespan', size: 'Size',
+      statusLabel: 'Conservation Status', family: 'Family',
+      didYouKnow: '💡 Did You Know?', buyKeychain: 'Buy Creature Keychain',
+      close: 'Close', addToCart: 'Add to Cart', viewCreature: 'View Creature',
+      product: n => n + ' Keychain',
+      noResult: q => 'No creature matches “' + q + '”.<br>Try another name, or reset the filter to <b>All</b>.',
+      added: n => n + ' added to cart', removed: n => n + ' removed',
+      totalItems: n => 'Total (' + n + ' items)',
+      welcome: 'Welcome to Blue Ocean, diver!',
+      ambientHint: 'Ocean ambience on — tap 🔊 to mute',
+      soundOn: 'Ocean sound on', soundOff: 'Sound muted',
+      cartStillEmpty: 'Your cart is still empty 🫧',
+      signedIn: 'Signed in as diver@blueocean.com',
+      learnMsg: 'Reduce plastic · choose reef-safe sunscreen · never touch the coral 💙',
+      langSwitched: 'Switched to English', langBtn: 'ไทย'
+    },
+    th: {
+      loginTagline: 'สำรวจโลกใต้ท้องทะเล',
+      email: 'อีเมล', password: 'รหัสผ่าน', enterAquarium: 'เข้าสู่อควาเรียม 🌊',
+      loginHint: 'โหมดทดลอง — ไม่ต้องมีบัญชีจริง<br>🔊 แนะนำให้เปิดเสียง ปิดได้จากปุ่มลำโพงบนเมนู',
+      step1: '1 · ล็อกอิน', step2: '2 · สำรวจ', step3: '3 · เรียนรู้', step4: '4 · สะสม',
+      navHome: 'หน้าแรก', navExplore: 'สำรวจ', navCreatures: 'สัตว์ทะเล', navShop: 'ร้านค้า', navAbout: 'เกี่ยวกับเรา',
+      heroEyebrow: 'อควาเรียมออนไลน์แบบอินเทอร์แอกทีฟ',
+      heroTitle: 'ดำดิ่งสู่<span class="aqua">ท้องทะเล</span>',
+      heroSub: 'ค้นพบสัตว์ทะเลลึกลับใต้เกลียวคลื่น แตะสัตว์ตัวไหนก็ได้ที่กำลังว่ายอยู่ในตู้ เพื่ออ่านเรื่องราวของมัน',
+      heroCta1: 'สำรวจสัตว์ทะเล', heroCta2: 'แวะร้านของที่ระลึก 🔑', scrollCue: 'เลื่อนลงเพื่อดำน้ำ',
+      tankEyebrow: 'ตู้ปลาหลัก', tankTitle: 'อควาเรียมมีชีวิต',
+      tankSub: 'สัตว์ทะเล 17 ชนิดอาศัยอยู่ในตู้นี้ วางเมาส์เพื่อดูว่าตัวไหนกำลังว่ายผ่าน แล้วคลิกเพื่อเปิดการ์ดข้อมูลของมัน',
+      tankHint: '👆 คลิกที่สัตว์เพื่อดูข้อมูล',
+      exploreEyebrow: 'สารานุกรมสัตว์ทะเล', exploreTitle: 'สำรวจสัตว์ทะเล',
+      exploreSub: 'ค้นหาจากชื่อ หรือกรองตามหมวดหมู่ ทุกการ์ดเปิดดูถิ่นอาศัย อาหาร อายุขัย และสถานะการอนุรักษ์ได้',
+      searchPh: 'ค้นหาสัตว์ทะเล…',
+      catAll: 'ทั้งหมด', catFish: 'ปลา', catMammal: 'เลี้ยงลูกด้วยนม', catReptile: 'เลื้อยคลาน', catInvert: 'ไม่มีกระดูกสันหลัง',
+      shopEyebrow: 'ร้านของที่ระลึก', shopTitle: 'พาท้องทะเลกลับบ้านไปด้วยกัน',
+      shopSub: 'พาสัตว์ทะเลตัวโปรดติดตัวไปด้วย ทุกพวงกุญแจช่วยสนับสนุนโครงการอนุรักษ์ทะเล',
+      consEyebrow: 'การอนุรักษ์', consTitle: 'ปกป้องท้องทะเลของเรา',
+      consSub: 'สัตว์ทุกชนิดมีบทบาทในระบบนิเวศทางทะเล เรียนรู้ สำรวจ และช่วยกันปกป้องดาวเคราะห์สีน้ำเงินใบนี้',
+      stat1: 'ของพื้นผิวโลกถูกปกคลุมด้วยมหาสมุทร',
+      stat2: 'ของสิ่งมีชีวิตในทะเลยังไม่ถูกสำรวจ',
+      stat3: 'หนึ่งโลก หนึ่งความรับผิดชอบ',
+      oceanSuffix: ' มหาสมุทร', learnMore: 'เรียนรู้เพิ่มเติม 💙',
+      footerAbout: 'สำรวจ · เรียนรู้ · ปกป้อง<br>อควาเรียมออนไลน์แบบอินเทอร์แอกทีฟ ที่ทำให้ท้องทะเลลึกอยู่ใกล้เราขึ้นอีกนิด',
+      footerMenu: 'เมนู', footerVisit: 'เยี่ยมชม',
+      fMainTank: 'ตู้ปลาหลัก', fEncyclopedia: 'สารานุกรม', fGiftShop: 'ร้านของที่ระลึก', fConservation: 'การอนุรักษ์',
+      copyright: '© 2026 Blue Ocean Aquarium · สร้างด้วย 💙 เพื่อท้องทะเล',
+      cartTitle: '🛒 ตะกร้าของคุณ', cartTotal: 'ยอดรวม', checkout: 'ชำระเงิน',
+      cartNote: '10% ของทุกคำสั่งซื้อมอบให้โครงการฟื้นฟูแนวปะการัง',
+      cartEmpty: 'ตะกร้ายังว่างอยู่<br>เลือกสัตว์ตัวโปรดจากร้านของที่ระลึกด้านล่าง',
+      orderConfirmed: 'ยืนยันคำสั่งซื้อแล้ว',
+      thankYou: 'ขอบคุณที่ร่วมสนับสนุนการอนุรักษ์ท้องทะเล 💙',
+      continueExploring: 'สำรวจต่อ',
+      habitat: 'ถิ่นอาศัย', diet: 'อาหาร', lifespan: 'อายุขัย', size: 'ขนาด',
+      statusLabel: 'สถานะการอนุรักษ์', family: 'หมวดหมู่',
+      didYouKnow: '💡 รู้หรือไม่?', buyKeychain: 'ซื้อพวงกุญแจตัวนี้',
+      close: 'ปิด', addToCart: 'ใส่ตะกร้า', viewCreature: 'ดูข้อมูลสัตว์',
+      product: n => 'พวงกุญแจ' + n,
+      noResult: q => 'ไม่พบสัตว์ที่ตรงกับ “' + q + '”<br>ลองชื่ออื่น หรือกดตัวกรอง <b>ทั้งหมด</b>',
+      added: n => 'เพิ่ม' + n + 'ลงตะกร้าแล้ว', removed: n => 'นำ' + n + 'ออกจากตะกร้าแล้ว',
+      totalItems: n => 'ยอดรวม (' + n + ' ชิ้น)',
+      welcome: 'ยินดีต้อนรับสู่ Blue Ocean นักดำน้ำ!',
+      ambientHint: 'เปิดเสียงทะเลแล้ว — กด 🔊 เพื่อปิด',
+      soundOn: 'เปิดเสียงทะเล', soundOff: 'ปิดเสียงแล้ว',
+      cartStillEmpty: 'ตะกร้ายังว่างอยู่ 🫧',
+      signedIn: 'เข้าสู่ระบบในชื่อ diver@blueocean.com',
+      learnMsg: 'ลดพลาสติก · เลือกครีมกันแดดที่ปลอดภัยต่อปะการัง · ไม่แตะต้องปะการัง 💙',
+      langSwitched: 'เปลี่ยนเป็นภาษาไทยแล้ว', langBtn: 'EN'
+    }
+  };
 
-  /* ===== B. HELPERS ======================================== */
+  const CAT_LABEL = {
+    en: { fish: 'Fish', mammal: 'Mammal', reptile: 'Reptile', invertebrate: 'Invertebrate' },
+    th: { fish: 'ปลา', mammal: 'เลี้ยงลูกด้วยนม', reptile: 'สัตว์เลื้อยคลาน', invertebrate: 'ไม่มีกระดูกสันหลัง' }
+  };
+
+  let LANG = 'en';
+  const t = key => I18N[LANG][key];
+
+  /* ===== D. HELPERS ======================================== */
   const $  = (sel, ctx) => (ctx || document).querySelector(sel);
   const $$ = (sel, ctx) => Array.from((ctx || document).querySelectorAll(sel));
   const rand = (min, max) => Math.random() * (max - min) + min;
   const byId = id => CREATURES.find(c => c.id === id);
   const baht = n => '฿' + n.toLocaleString('en-US');
-  const art = c => c.svg ? c.svg : c.emoji;      // illustration for a creature
+  const art = c => c.svg ? c.svg : c.emoji;                       // illustration
+  const nameOf = c => LANG === 'th' ? c.thai : c.name;            // primary name
+  const altName = c => LANG === 'th' ? c.name : c.thai;           // secondary name
+  const info = (c, key) => LANG === 'th' ? c.th[key] : c[key];    // localised field
+  const catOf = c => CAT_LABEL[LANG][c.cat];
+  const productName = c => t('product')(nameOf(c));
 
   function toast(msg, emoji) {
     const zone = $('#toastZone');
@@ -1129,12 +1425,11 @@ a{color:inherit;text-decoration:none;}
     el.className = 'toast';
     el.innerHTML = '<span style="font-size:1.2rem">' + (emoji || '💧') + '</span><span>' + msg + '</span>';
     zone.appendChild(el);
-    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 400); }, 2200);
+    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 400); }, 2400);
   }
 
-  /* ===== C. AMBIENT OCEAN ================================== */
+  /* ===== E. AMBIENT OCEAN VISUALS ========================== */
   function buildAmbience() {
-    // Light rays
     const rays = $('#rays');
     [12, 30, 52, 71, 88].forEach((left, i) => {
       const r = document.createElement('div');
@@ -1146,7 +1441,6 @@ a{color:inherit;text-decoration:none;}
       rays.appendChild(r);
     });
 
-    // Plankton particles
     const pLayer = $('#particleLayer');
     for (let i = 0; i < 42; i++) {
       const p = document.createElement('span');
@@ -1157,7 +1451,6 @@ a{color:inherit;text-decoration:none;}
       pLayer.appendChild(p);
     }
 
-    // Bubbles rising from the seabed
     const bLayer = $('#bubbleLayer');
     for (let i = 0; i < 26; i++) {
       const b = document.createElement('span');
@@ -1168,10 +1461,8 @@ a{color:inherit;text-decoration:none;}
       bLayer.appendChild(b);
     }
 
-    // Distant fish silhouettes drifting behind everything
     const fLayer = $('#bgFishLayer');
-    const school = ['🐟', '🐠', '🐡', '🦈', '🐬', '🐟', '🪼'];
-    school.forEach((f, i) => {
+    ['🐟', '🐠', '🐡', '🦈', '🐬', '🦑', '🪼'].forEach((f, i) => {
       const el = document.createElement('span');
       el.className = 'bg-fish' + (i % 2 ? ' rtl' : '');
       el.textContent = f;
@@ -1180,19 +1471,16 @@ a{color:inherit;text-decoration:none;}
       fLayer.appendChild(el);
     });
 
-    // Seaweed / coral / rocks along the seabed (page background + tank floor)
     ['#seabed', '#tankBed'].forEach(sel => decorateSeabed($(sel)));
   }
 
   function decorateSeabed(bed) {
     if (!bed) return;
-    const positions = [4, 11, 19, 27, 36, 48, 57, 66, 74, 83, 91, 97];
-    positions.forEach((left, i) => {
+    [4, 11, 19, 27, 36, 48, 57, 66, 74, 83, 91, 97].forEach(left => {
       const w = document.createElement('span');
       w.className = 'weed';
       w.style.cssText = 'left:' + left + '%;height:' + rand(56, 148) + 'px;' +
-        'animation-duration:' + rand(3.6, 7) + 's;animation-delay:' + (-rand(0, 4)) + 's;' +
-        'opacity:' + rand(.5, .9);
+        'animation-duration:' + rand(3.6, 7) + 's;animation-delay:' + (-rand(0, 4)) + 's;opacity:' + rand(.5, .9);
       bed.appendChild(w);
     });
     [['🪸', 14], ['🪸', 52], ['🌿', 71], ['🪸', 88]].forEach(([icon, left], i) => {
@@ -1210,11 +1498,10 @@ a{color:inherit;text-decoration:none;}
     });
   }
 
-  /* ===== D. SOUND ENGINE (Web Audio API — no audio files) ===
-     ทุกเสียงถูก "สังเคราะห์" ขึ้นด้วยโค้ด จึงไม่ต้องโหลดไฟล์เสียงใด ๆ
-       · ambient  = brown noise ผ่าน lowpass + LFO 2 ตัว (คลื่นซัดเข้า-ออก)
-                    + drone ความถี่ต่ำ (แรงดันใต้น้ำ) + ฟองอากาศสุ่มเป็นระยะ
-       · click    = sine ที่ไล่ความถี่ลง + noise transient สั้น ๆ (เสียงหยดน้ำ)
+  /* ===== F. SOUND ENGINE (Web Audio API — no audio files) ===
+       · ambient = brown noise ผ่าน lowpass + LFO 2 ตัว (คลื่นซัดเข้า-ออก)
+                   + drone ความถี่ต่ำ (แรงดันใต้น้ำ) + ฟองอากาศสุ่มเป็นระยะ
+       · click   = sine ไล่ความถี่ลง + noise transient สั้น ๆ (เสียงหยดน้ำ)
      เบราว์เซอร์ห้ามเล่นเสียงก่อนผู้ใช้กดอะไรสักอย่าง จึงสร้าง AudioContext
      ตอนกดปุ่ม ENTER AQUARIUM ซึ่งเป็น user gesture แรกพอดี
      ========================================================= */
@@ -1225,7 +1512,7 @@ a{color:inherit;text-decoration:none;}
     function ensure() {
       if (ctx) return ctx;
       const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return null;                       // เบราว์เซอร์เก่า → เงียบไปเฉย ๆ
+      if (!AC) return null;
       ctx = new AC();
       master = ctx.createGain();
       master.gain.value = muted ? 0 : 1;
@@ -1234,7 +1521,6 @@ a{color:inherit;text-decoration:none;}
       return ctx;
     }
 
-    // brown noise = เนื้อเสียงของ "น้ำ" (นุ่มกว่า white noise มาก)
     function makeNoise(seconds) {
       const len = Math.floor(ctx.sampleRate * seconds);
       const buf = ctx.createBuffer(1, len, ctx.sampleRate);
@@ -1257,38 +1543,32 @@ a{color:inherit;text-decoration:none;}
       src.loop = true;
 
       const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 460;
-      filter.Q.value = .7;
+      filter.type = 'lowpass'; filter.frequency.value = 460; filter.Q.value = .7;
 
       const gain = ctx.createGain();
       gain.gain.value = 0;
       src.connect(filter); filter.connect(gain); gain.connect(master);
       src.start();
 
-      // LFO 1 → ขยับ cutoff ทำให้คลื่นดัง-เบาเหมือนน้ำซัด
       const lfo = ctx.createOscillator(); lfo.frequency.value = .07;
       const lfoAmt = ctx.createGain(); lfoAmt.gain.value = 250;
       lfo.connect(lfoAmt); lfoAmt.connect(filter.frequency); lfo.start();
 
-      // LFO 2 → ขยับความดังช้ากว่า ให้จังหวะหายใจของทะเล
       const lfo2 = ctx.createOscillator(); lfo2.frequency.value = .045;
       const lfo2Amt = ctx.createGain(); lfo2Amt.gain.value = .022;
       lfo2.connect(lfo2Amt); lfo2Amt.connect(gain.gain); lfo2.start();
 
-      // drone ความถี่ต่ำ = ความรู้สึกอยู่ใต้น้ำลึก
       const drone = ctx.createOscillator(); drone.type = 'sine'; drone.frequency.value = 58;
       const droneGain = ctx.createGain(); droneGain.gain.value = .015;
       drone.connect(droneGain); droneGain.connect(master); drone.start();
 
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(.075, now + 3);   // fade in ช้า ๆ
+      gain.gain.linearRampToValueAtTime(.075, now + 3);
 
       ambient = { src, gain, lfo, lfo2, drone };
       scheduleBubble();
     }
 
-    // ฟองอากาศผุดขึ้นแบบสุ่มทุก 3–8 วินาที
     function scheduleBubble() {
       clearTimeout(bubbleTimer);
       bubbleTimer = setTimeout(() => { bubble(); scheduleBubble(); }, rand(3000, 8000));
@@ -1296,55 +1576,53 @@ a{color:inherit;text-decoration:none;}
 
     function bubble() {
       if (!ctx || muted || document.hidden) return;
-      const t = ctx.currentTime;
+      const t0 = ctx.currentTime;
       const o = ctx.createOscillator(); o.type = 'sine';
       const g = ctx.createGain();
       const f0 = rand(230, 480);
-      o.frequency.setValueAtTime(f0, t);
-      o.frequency.exponentialRampToValueAtTime(f0 * 2.7, t + .13);
-      g.gain.setValueAtTime(.0001, t);
-      g.gain.exponentialRampToValueAtTime(.045, t + .012);
-      g.gain.exponentialRampToValueAtTime(.0001, t + .18);
+      o.frequency.setValueAtTime(f0, t0);
+      o.frequency.exponentialRampToValueAtTime(f0 * 2.7, t0 + .13);
+      g.gain.setValueAtTime(.0001, t0);
+      g.gain.exponentialRampToValueAtTime(.045, t0 + .012);
+      g.gain.exponentialRampToValueAtTime(.0001, t0 + .18);
       o.connect(g); g.connect(master);
-      o.start(t); o.stop(t + .22);
+      o.start(t0); o.stop(t0 + .22);
     }
 
-    // เสียงคลิก = หยดน้ำ (sine ไล่ลง + noise transient สั้น)
     function click(pitch) {
       if (!ensure() || muted) return;
-      const t = ctx.currentTime;
+      const t0 = ctx.currentTime;
       const f = (pitch || 820) * rand(.92, 1.08);
 
       const o = ctx.createOscillator(); o.type = 'sine';
       const g = ctx.createGain();
-      o.frequency.setValueAtTime(f, t);
-      o.frequency.exponentialRampToValueAtTime(f * .42, t + .1);
-      g.gain.setValueAtTime(.0001, t);
-      g.gain.exponentialRampToValueAtTime(.13, t + .008);
-      g.gain.exponentialRampToValueAtTime(.0001, t + .24);
+      o.frequency.setValueAtTime(f, t0);
+      o.frequency.exponentialRampToValueAtTime(f * .42, t0 + .1);
+      g.gain.setValueAtTime(.0001, t0);
+      g.gain.exponentialRampToValueAtTime(.13, t0 + .008);
+      g.gain.exponentialRampToValueAtTime(.0001, t0 + .24);
       o.connect(g); g.connect(master);
-      o.start(t); o.stop(t + .26);
+      o.start(t0); o.stop(t0 + .26);
 
       const n = ctx.createBufferSource(); n.buffer = tapBuf;
       const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
       bp.frequency.value = 1700; bp.Q.value = 1.1;
       const ng = ctx.createGain();
-      ng.gain.setValueAtTime(.055, t);
-      ng.gain.exponentialRampToValueAtTime(.0001, t + .06);
+      ng.gain.setValueAtTime(.055, t0);
+      ng.gain.exponentialRampToValueAtTime(.0001, t0 + .06);
       n.connect(bp); bp.connect(ng); ng.connect(master);
-      n.start(t); n.stop(t + .08);
+      n.start(t0); n.stop(t0 + .08);
     }
 
     function setMuted(v) {
       muted = v;
       if (!ctx) return;
-      const t = ctx.currentTime;
-      master.gain.cancelScheduledValues(t);
-      master.gain.setValueAtTime(master.gain.value, t);
-      master.gain.linearRampToValueAtTime(v ? 0 : 1, t + .35);
+      const t0 = ctx.currentTime;
+      master.gain.cancelScheduledValues(t0);
+      master.gain.setValueAtTime(master.gain.value, t0);
+      master.gain.linearRampToValueAtTime(v ? 0 : 1, t0 + .35);
     }
 
-    // เบราว์เซอร์พักเสียงเมื่อสลับแท็บ → คืนค่าเมื่อกลับมา
     document.addEventListener('visibilitychange', () => {
       if (!ctx) return;
       if (document.hidden) ctx.suspend(); else if (!muted) ctx.resume();
@@ -1359,48 +1637,28 @@ a{color:inherit;text-decoration:none;}
     };
   })();
 
-  /* ===== E. LOGIN TRANSITION =============================== */
+  /* ===== G. LOGIN TRANSITION =============================== */
   function initLogin() {
     const screen = $('#login-screen');
     const site = $('#site');
     $('#loginForm').addEventListener('submit', e => {
       e.preventDefault();
       const btn = $('#loginBtn');
-      btn.textContent = 'Diving in… 🫧';
+      btn.textContent = LANG === 'th' ? 'กำลังดำลง… 🫧' : 'Diving in… 🫧';
       btn.disabled = true;
-      Sound.start();                       // user gesture แรก → ปลดล็อกเสียงได้
+      Sound.start();
       screen.classList.add('dive');
       setTimeout(() => {
         screen.style.display = 'none';
         site.classList.add('on');
         window.scrollTo(0, 0);
-        toast('Welcome to Blue Ocean, diver!', '🐬');
+        toast(t('welcome'), '🐬');
       }, 900);
-      setTimeout(() => toast('Ocean ambience on — tap 🔊 to mute', '🔊'), 2600);
+      setTimeout(() => toast(t('ambientHint'), '🔊'), 2600);
     });
   }
 
-  /* ===== F2. UI SOUND WIRING ============================== */
-  function initSoundUI() {
-    const btn = $('#soundToggle');
-
-    btn.addEventListener('click', () => {
-      const muted = Sound.toggle();
-      btn.textContent = muted ? '🔇' : '🔊';
-      btn.classList.toggle('muted', muted);
-      btn.classList.toggle('sounding', !muted);
-      toast(muted ? 'Sound muted' : 'Ocean sound on', muted ? '🔇' : '🔊');
-    });
-
-    // เล่นเสียงคลิกให้ปุ่ม / เมนู / chip ทุกตัวในเว็บด้วย event delegation
-    document.addEventListener('pointerdown', e => {
-      const el = e.target.closest('button, .btn, .chip, .nav-links a, .footer ul a, .socials a');
-      if (!el || el.id === 'soundToggle') return;
-      Sound.click(el.classList.contains('btn-primary') ? 720 : 880);
-    }, true);
-  }
-
-  /* ===== F. NAVIGATION ===================================== */
+  /* ===== H. NAVIGATION ===================================== */
   function initNav() {
     const nav = $('#nav');
     const links = $('#navLinks');
@@ -1408,7 +1666,6 @@ a{color:inherit;text-decoration:none;}
     $('#burger').addEventListener('click', () => links.classList.toggle('open'));
     $$('#navLinks a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
 
-    // transparent → solid on scroll + scroll spy + light parallax
     const sections = ['home', 'aquarium', 'creatures', 'shop', 'about'].map(id => $('#' + id));
     const bg = $('#oceanBg');
     let ticking = false;
@@ -1418,9 +1675,9 @@ a{color:inherit;text-decoration:none;}
       requestAnimationFrame(() => {
         const y = window.scrollY;
         nav.classList.toggle('scrolled', y > 40);
-        bg.style.transform = 'translateY(' + (y * -0.06) + 'px)';           // parallax layer 1
-        $('#bgFishLayer').style.transform = 'translateY(' + (y * -0.14) + 'px)'; // parallax layer 2
-        $('#rays').style.transform = 'translateY(' + (y * 0.05) + 'px)';         // parallax layer 3
+        bg.style.transform = 'translateY(' + (y * -0.06) + 'px)';
+        $('#bgFishLayer').style.transform = 'translateY(' + (y * -0.14) + 'px)';
+        $('#rays').style.transform = 'translateY(' + (y * 0.05) + 'px)';
 
         let current = 'home';
         sections.forEach(s => { if (s && s.getBoundingClientRect().top <= 140) current = s.id; });
@@ -1429,7 +1686,6 @@ a{color:inherit;text-decoration:none;}
       });
     }, { passive: true });
 
-    // Search dropdown in the navbar
     const navSearch = $('#navSearch');
     const navInput = $('#navSearchInput');
     $('#searchToggle').addEventListener('click', e => {
@@ -1449,16 +1705,74 @@ a{color:inherit;text-decoration:none;}
     $('#navSearchGo').addEventListener('click', runNavSearch);
     navInput.addEventListener('keydown', e => { if (e.key === 'Enter') runNavSearch(); });
 
-    $('#userBtn').addEventListener('click', () => toast('Signed in as diver@blueocean.com', '👤'));
-    $('#learnMore').addEventListener('click', () => {
-      toast('Reduce plastic · choose reef-safe sunscreen · never touch the coral 💙', '🌏');
+    $('#userBtn').addEventListener('click', () => toast(t('signedIn'), '👤'));
+    $('#learnMore').addEventListener('click', () => toast(t('learnMsg'), '🌏'));
+  }
+
+  /* ===== H2. UI SOUND WIRING =============================== */
+  function initSoundUI() {
+    const btn = $('#soundToggle');
+    btn.addEventListener('click', () => {
+      const muted = Sound.toggle();
+      btn.textContent = muted ? '🔇' : '🔊';
+      btn.classList.toggle('muted', muted);
+      btn.classList.toggle('sounding', !muted);
+      toast(muted ? t('soundOff') : t('soundOn'), muted ? '🔇' : '🔊');
+    });
+
+    document.addEventListener('pointerdown', e => {
+      const el = e.target.closest('button, .btn, .chip, .nav-links a, .footer ul a, .socials a');
+      if (!el || el.id === 'soundToggle') return;
+      Sound.click(el.classList.contains('btn-primary') ? 720 : 880);
+    }, true);
+  }
+
+  /* ===== H3. LANGUAGE SWITCH (EN ⇄ TH) =====================
+     เปลี่ยนได้ทั้งข้อความคงที่ (data-i18n) และเนื้อหาที่สร้างจาก
+     JavaScript (การ์ดสัตว์ · ตู้ปลา · ร้านค้า · ตะกร้า · modal)
+     ========================================================= */
+  function applyLang(lang) {
+    LANG = lang;
+    document.documentElement.lang = lang;
+    document.body.classList.toggle('th', lang === 'th');
+
+    // 1) ข้อความคงที่ทั้งหมด
+    $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    $$('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+    $$('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+
+    // 2) counter ที่มีหน่วยเป็นคำ ("1 Ocean" → "1 มหาสมุทร")
+    $$('#stats .num').forEach(el => {
+      if (el.dataset.suffixKey) el.dataset.suffix = t(el.dataset.suffixKey);
+      if (el.dataset.done === '1') el.textContent = el.dataset.count + el.dataset.suffix;
+    });
+
+    // 3) ส่วนที่ JavaScript สร้างขึ้น
+    $$('#tank .crt').forEach(el => {
+      const c = byId(el.dataset.id);
+      $('.tag', el).textContent = nameOf(c);
+      el.setAttribute('aria-label', nameOf(c));
+    });
+    buildLegend();
+    renderGrid();
+    buildShop();
+    renderCart();
+    if ($('#creatureOverlay').classList.contains('open') && openId) openCreature(openId);
+
+    $('#langToggle').textContent = t('langBtn');
+    $('#loginBtn').textContent = t('enterAquarium');
+  }
+
+  function initLangUI() {
+    $('#langToggle').addEventListener('click', () => {
+      applyLang(LANG === 'en' ? 'th' : 'en');
+      toast(t('langSwitched'), '🌐');
     });
   }
 
-  /* ===== G. INTERACTIVE AQUARIUM TANK ====================== */
+  /* ===== I. INTERACTIVE AQUARIUM TANK ====================== */
   function buildTank() {
     const tank = $('#tank');
-    const legend = $('#tankLegend');
 
     CREATURES.forEach(c => {
       const el = document.createElement('div');
@@ -1481,8 +1795,7 @@ a{color:inherit;text-decoration:none;}
         el.style.top = c.top + '%';
         el.style.left = c.left + '%';
         el.style.animationDelay = (-rand(0, 5)) + 's';
-        bobClass = 'bob';
-      } else { // seabed dweller
+      } else {
         el.style.top = c.top + '%';
         el.style.left = c.left + '%';
         bobClass = 'bob wobble';
@@ -1492,7 +1805,7 @@ a{color:inherit;text-decoration:none;}
         '<span class="' + bobClass + '" style="animation-delay:' + (-rand(0, 4)).toFixed(2) + 's">' +
           '<span class="body">' + art(c) + '</span>' +
         '</span>' +
-        '<span class="tag">' + c.name + '</span>';
+        '<span class="tag">' + nameOf(c) + '</span>';
 
       const open = () => {
         el.classList.add('tapped');
@@ -1502,16 +1815,24 @@ a{color:inherit;text-decoration:none;}
       el.addEventListener('click', open);
       el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
       tank.appendChild(el);
+    });
 
-      // legend shortcut (also handy on small screens where fish move fast)
+    buildLegend();
+  }
+
+  // ปุ่มลัดใต้ตู้ปลา — ช่วยให้กดสัตว์ได้ง่ายบนมือถือที่ปลาว่ายเร็ว
+  function buildLegend() {
+    const legend = $('#tankLegend');
+    legend.innerHTML = '';
+    CREATURES.forEach(c => {
       const b = document.createElement('button');
-      b.innerHTML = '<span>' + (c.svg ? '🥏' : c.emoji) + '</span>' + c.name;
+      b.innerHTML = '<span style="font-size:1.05rem;display:inline-flex">' + art(c) + '</span>' + nameOf(c);
       b.addEventListener('click', () => openCreature(c.id));
       legend.appendChild(b);
     });
   }
 
-  /* ===== H. EXPLORE GRID: SEARCH + FILTER ================== */
+  /* ===== J. EXPLORE GRID: SEARCH + FILTER ================== */
   let activeCat = 'all';
 
   function renderGrid() {
@@ -1519,22 +1840,21 @@ a{color:inherit;text-decoration:none;}
     const grid = $('#creatureGrid');
     const list = CREATURES.filter(c => {
       const okCat = activeCat === 'all' || c.cat === activeCat;
-      const okQ = !q || (c.name + ' ' + c.thai + ' ' + c.sci + ' ' + c.habitat).toLowerCase().includes(q);
-      return okCat && okQ;
+      const hay = (c.name + ' ' + c.thai + ' ' + c.sci + ' ' + c.habitat + ' ' + c.th.habitat).toLowerCase();
+      return okCat && (!q || hay.includes(q));
     });
 
     if (!list.length) {
-      grid.innerHTML = '<div class="empty-state"><span class="big">🫧</span>No creature matches “' + q +
-        '”.<br>Try another name, or reset the filter to <b>All</b>.</div>';
+      grid.innerHTML = '<div class="empty-state"><span class="big">🫧</span>' + t('noResult')(q) + '</div>';
       return;
     }
 
     grid.innerHTML = list.map(c =>
       '<article class="creature-card glass" data-id="' + c.id + '" tabindex="0">' +
         '<span class="avatar">' + art(c) + '</span>' +
-        '<h3>' + c.name + '</h3>' +
-        '<p class="th">' + c.thai + '</p>' +
-        '<span class="badge">' + CAT_LABEL[c.cat] + '</span>' +
+        '<h3>' + nameOf(c) + '</h3>' +
+        '<p class="th">' + altName(c) + '</p>' +
+        '<span class="badge">' + catOf(c) + '</span>' +
       '</article>'
     ).join('');
 
@@ -1558,31 +1878,34 @@ a{color:inherit;text-decoration:none;}
     renderGrid();
   }
 
-  /* ===== I. CREATURE MODAL ================================= */
+  /* ===== K. CREATURE MODAL ================================= */
+  let openId = null;
+
   function openCreature(id) {
     const c = byId(id);
     if (!c) return;
+    openId = id;
     const modal = $('#creatureModal');
     modal.innerHTML =
       '<button class="modal-close" data-close-creature aria-label="Close">✕</button>' +
       '<div class="modal-head">' +
         '<div class="modal-avatar">' + art(c) + '</div>' +
         '<div>' +
-          '<span class="eyebrow">' + CAT_LABEL[c.cat] + '</span>' +
-          '<h2>' + c.name + '</h2>' +
-          '<p class="th-name">' + c.thai + ' · <i>' + c.sci + '</i></p>' +
-          '<span class="status-pill ' + c.statusClass + '">' + c.status + '</span>' +
+          '<span class="eyebrow">' + catOf(c) + '</span>' +
+          '<h2>' + nameOf(c) + '</h2>' +
+          '<p class="th-name">' + altName(c) + ' · <i>' + c.sci + '</i></p>' +
+          '<span class="status-pill ' + c.statusClass + '">' + info(c, 'status') + '</span>' +
         '</div>' +
       '</div>' +
       '<div class="facts">' +
-        fact('Habitat', c.habitat) + fact('Diet', c.diet) +
-        fact('Lifespan', c.lifespan) + fact('Size', c.size) +
-        fact('Conservation Status', c.status) + fact('Family', CAT_LABEL[c.cat]) +
+        fact(t('habitat'), info(c, 'habitat')) + fact(t('diet'), info(c, 'diet')) +
+        fact(t('lifespan'), info(c, 'lifespan')) + fact(t('size'), info(c, 'size')) +
+        fact(t('statusLabel'), info(c, 'status')) + fact(t('family'), catOf(c)) +
       '</div>' +
-      '<div class="didyouknow"><div class="k">💡 Did You Know?</div><p>' + c.fact + '</p></div>' +
+      '<div class="didyouknow"><div class="k">' + t('didYouKnow') + '</div><p>' + info(c, 'fact') + '</p></div>' +
       '<div class="modal-actions">' +
-        '<button class="btn btn-primary" data-buy="' + c.id + '">Buy Creature Keychain · ' + baht(c.price) + '</button>' +
-        '<button class="btn btn-ghost" data-close-creature>Close</button>' +
+        '<button class="btn btn-primary" data-buy="' + c.id + '">' + t('buyKeychain') + ' · ' + baht(c.price) + '</button>' +
+        '<button class="btn btn-ghost" data-close-creature>' + t('close') + '</button>' +
       '</div>';
 
     $('#creatureOverlay').classList.add('open');
@@ -1598,9 +1921,10 @@ a{color:inherit;text-decoration:none;}
   function closeCreature() {
     $('#creatureOverlay').classList.remove('open');
     document.body.classList.remove('locked');
+    openId = null;
   }
 
-  /* ===== J. KEYCHAIN SHOP ================================== */
+  /* ===== L. KEYCHAIN SHOP ================================== */
   function buildShop() {
     const grid = $('#shopGrid');
     grid.innerHTML = SHOP_IDS.map(id => {
@@ -1608,11 +1932,11 @@ a{color:inherit;text-decoration:none;}
       return '<article class="product glass">' +
         '<div class="thumb"><span class="ring"></span><span class="hook">🔑</span><span class="emoji">' + art(c) + '</span></div>' +
         '<div class="info">' +
-          '<h3>' + c.name + ' Keychain</h3>' +
+          '<h3>' + productName(c) + '</h3>' +
           '<p class="price">' + baht(c.price) + '</p>' +
           '<div class="acts">' +
-            '<button class="btn btn-primary" data-add="' + c.id + '">Add to Cart</button>' +
-            '<button class="btn btn-ghost" data-view="' + c.id + '">View Creature</button>' +
+            '<button class="btn btn-primary" data-add="' + c.id + '">' + t('addToCart') + '</button>' +
+            '<button class="btn btn-ghost" data-view="' + c.id + '">' + t('viewCreature') + '</button>' +
           '</div>' +
         '</div>' +
       '</article>';
@@ -1622,7 +1946,7 @@ a{color:inherit;text-decoration:none;}
     $$('[data-view]', grid).forEach(b => b.addEventListener('click', () => openCreature(b.dataset.view)));
   }
 
-  /* ===== K. CART =========================================== */
+  /* ===== M. CART =========================================== */
   const cart = [];   // { id, qty }
 
   function addToCart(id, sourceEl) {
@@ -1634,7 +1958,7 @@ a{color:inherit;text-decoration:none;}
     const badge = $('#cartCount');
     badge.classList.add('pulse');
     setTimeout(() => badge.classList.remove('pulse'), 500);
-    toast(c.name + ' Keychain added to cart', c.svg ? '🥏' : c.emoji);
+    toast(t('added')(productName(c)), art(c));
   }
 
   function changeQty(id, delta) {
@@ -1647,7 +1971,7 @@ a{color:inherit;text-decoration:none;}
 
   function removeFromCart(id) {
     const i = cart.findIndex(l => l.id === id);
-    if (i > -1) { const name = byId(id).name; cart.splice(i, 1); renderCart(); toast(name + ' Keychain removed', '🗑️'); }
+    if (i > -1) { const c = byId(id); cart.splice(i, 1); renderCart(); toast(t('removed')(productName(c)), '🗑️'); }
   }
 
   const cartTotal = () => cart.reduce((sum, l) => sum + byId(l.id).price * l.qty, 0);
@@ -1656,19 +1980,19 @@ a{color:inherit;text-decoration:none;}
   function renderCart() {
     const box = $('#cartItems');
     if (!cart.length) {
-      box.innerHTML = '<div class="cart-empty"><span class="big">🫧</span>Your cart is empty.<br>Pick a creature from the gift shop below.</div>';
+      box.innerHTML = '<div class="cart-empty"><span class="big">🫧</span>' + t('cartEmpty') + '</div>';
     } else {
       box.innerHTML = cart.map(l => {
         const c = byId(l.id);
         return '<div class="cart-item">' +
           '<span class="ci-emoji">' + art(c) + '</span>' +
           '<div class="ci-body">' +
-            '<div class="ci-name">' + c.name + ' Keychain</div>' +
+            '<div class="ci-name">' + productName(c) + '</div>' +
             '<div class="ci-price">' + baht(c.price) + ' × ' + l.qty + ' = ' + baht(c.price * l.qty) + '</div>' +
             '<div class="qty">' +
-              '<button data-minus="' + c.id + '" aria-label="Decrease">−</button>' +
+              '<button data-minus="' + c.id + '" aria-label="−">−</button>' +
               '<span>' + l.qty + '</span>' +
-              '<button data-plus="' + c.id + '" aria-label="Increase">+</button>' +
+              '<button data-plus="' + c.id + '" aria-label="+">+</button>' +
             '</div>' +
           '</div>' +
           '<button class="ci-remove" data-remove="' + c.id + '" aria-label="Remove">🗑️</button>' +
@@ -1684,7 +2008,6 @@ a{color:inherit;text-decoration:none;}
     badge.classList.toggle('show', cartCount() > 0);
   }
 
-  // little emoji that flies from the button into the cart icon
   function flyToCart(sourceEl, c) {
     if (!sourceEl || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const from = sourceEl.getBoundingClientRect();
@@ -1712,11 +2035,11 @@ a{color:inherit;text-decoration:none;}
     $('#cartBackdrop').addEventListener('click', closeCart);
 
     $('#checkoutBtn').addEventListener('click', () => {
-      if (!cart.length) { toast('Your cart is still empty 🫧'); return; }
+      if (!cart.length) { toast(t('cartStillEmpty')); return; }
       $('#receipt').innerHTML = cart.map(l => {
         const c = byId(l.id);
-        return '<div class="row"><span>' + (c.svg ? '🥏' : c.emoji) + ' ' + c.name + ' × ' + l.qty + '</span><span>' + baht(c.price * l.qty) + '</span></div>';
-      }).join('') + '<div class="row total"><span>Total (' + cartCount() + ' items)</span><span>' + baht(cartTotal()) + '</span></div>';
+        return '<div class="row"><span>' + productName(c) + ' × ' + l.qty + '</span><span>' + baht(c.price * l.qty) + '</span></div>';
+      }).join('') + '<div class="row total"><span>' + t('totalItems')(cartCount()) + '</span><span>' + baht(cartTotal()) + '</span></div>';
 
       closeCart();
       $('#checkoutOverlay').classList.add('open');
@@ -1730,7 +2053,6 @@ a{color:inherit;text-decoration:none;}
       document.body.classList.remove('locked');
     }));
 
-    // Esc closes whatever is open
     document.addEventListener('keydown', e => {
       if (e.key !== 'Escape') return;
       closeCreature();
@@ -1739,13 +2061,12 @@ a{color:inherit;text-decoration:none;}
       document.body.classList.remove('locked');
     });
 
-    // click on the dim backdrop closes the creature modal
     $('#creatureOverlay').addEventListener('click', e => { if (e.target.id === 'creatureOverlay') closeCreature(); });
 
     renderCart();
   }
 
-  /* ===== L. COUNTERS + SCROLL REVEAL ======================= */
+  /* ===== N. COUNTERS + SCROLL REVEAL ======================= */
   function initObservers() {
     const revealIO = new IntersectionObserver((entries, obs) => {
       entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); obs.unobserve(en.target); } });
@@ -1757,14 +2078,13 @@ a{color:inherit;text-decoration:none;}
         if (!en.isIntersecting) return;
         const el = en.target;
         const target = parseInt(el.dataset.count, 10);
-        const suffix = el.dataset.suffix || '';
         const dur = 1600;
         const start = performance.now();
         (function step(now) {
           const p = Math.min((now - start) / dur, 1);
           const eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = Math.round(target * eased) + suffix;
-          if (p < 1) requestAnimationFrame(step);
+          el.textContent = Math.round(target * eased) + el.dataset.suffix;
+          if (p < 1) requestAnimationFrame(step); else el.dataset.done = '1';
         })(start);
         obs.unobserve(el);
       });
@@ -1776,6 +2096,7 @@ a{color:inherit;text-decoration:none;}
   buildAmbience();
   initLogin();
   initSoundUI();
+  initLangUI();
   initNav();
   buildTank();
   initExplore();
