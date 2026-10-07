@@ -2,6 +2,7 @@
 
 > **Explore. Learn. Protect.**
 > เว็บไซต์อควาเรียมออนไลน์แบบ Interactive ที่ให้ผู้ใช้ "ดำน้ำ" เข้าไปสำรวจสัตว์ทะเล 12 ชนิด เรียนรู้ข้อมูลของแต่ละตัว และซื้อพวงกุญแจรูปสัตว์ทะเลกลับบ้าน
+> 
 **▶️ Website:** [https://blue-ocean-aquarium.netlify.app/](https://blue-ocean-aquarium.netlify.app/)
 <p align="center">
   <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white">
